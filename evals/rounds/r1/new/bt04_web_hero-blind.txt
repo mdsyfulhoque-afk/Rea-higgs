@@ -1,0 +1,39 @@
+$ higgsfield account status
+Account is authenticated. Continuing.
+
+Goal: "build me a similar hero for my site" is a recreate request. Type: web page (https://example-saas.com). The page is public, so I don't need a signed-in view and I'm not going behind any login or bot protection.
+
+Capture: I'd open the hero section in the browser and read the computed styles. I'm not copying the page's source, copy, or assets. The observed values below are what that inspection returned.
+
+REA is not connected, so I won't run its setup. The browser inspection is enough for the visual and motion spec. Anything that depends on what the site ships (bundled fonts, which assets load) stays unknown.
+
+Ledger (kept on disk at work/example-saas-hero/ledger.md):
+- L1: h1 is 64px, line height 1.05, weight 700. observed (computed style). hard, as a type scale.
+- L2: font family is Inter. observed. excluded as a font to reuse. Third-party fonts are not reused, so I'd pick a licensed or generated equivalent instead.
+- L3: accent #5b5bf6. observed (computed style). hard, as a palette color.
+- L4: hero media is a looping 6 s, 16:9 video. observed. hard.
+- L5: headline fades up over 600 ms with ease-out on load. observed (duration and easing). The intent behind it reads as a polished entrance. inferred. soft.
+- L6: contrast ratios. not measured yet. unknown. omit until I compute them from the palette (derived).
+- L7: the site's copy, logo, and brand mark. excluded (originality gate). I won't reproduce any of it.
+- L8: performance cue (how heavy the video is). not measured. unknown. omit.
+
+Spec summary, for your approval:
+- Goal: recreate. Output: a website hero section, 16:9 looping background video, 6 s loop.
+- Hard: 64px / 1.05 / weight 700 headline scale; accent color #5b5bf6 as the one highlight color; 16:9 looping hero video, 6 s.
+- Soft: headline fades up over about 600 ms on load with an ease-out feel.
+- Exclusions: Inter as the typeface, the site's copy, logo, and brand marks. The layout will use your brand's copy and assets, or original placeholders.
+- Open: your brand name, your copy, your palette and type if you have them. Whether you want the accent color kept or changed to your own.
+
+Route: this is two downstream steps, and I'll run them one at a time.
+1. Hero media first: higgsfield-generate, for the 6 s 16:9 loop, with the hard constraints above.
+2. Then the site itself: higgsfield-websites, using the layout and motion constraints from this spec and the hero asset from step 1.
+
+Plan (not created yet):
+- Model for the hero video: I'll run higgsfield model list and then higgsfield model get <model> --json on the candidates that support 16:9, about 6 s, and loop-friendly output. I won't name one until the list comes back.
+- Cost: once a model is chosen, I'll print higgsfield generate cost <model> ... for the single hero video. One job needs only your go-ahead.
+- Site: I'll hold the higgsfield-websites step until the hero video is approved.
+
+Nothing has been generated and nothing has been spent. Please confirm:
+1. Is the goal recreate, using only the structure and measured style of this hero?
+2. What brand, copy, and palette should the new hero use? Should I keep #5b5bf6 or change it?
+3. Do you approve the spec above, so I can move to the hero video and print its cost?

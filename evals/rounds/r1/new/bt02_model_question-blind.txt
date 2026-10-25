@@ -1,0 +1,8 @@
+Stage 0, intake: the reference is a video (work/clip.mp4), and your question is about the model that made it. The goal is not clear yet. "Which model made this" is an analysis question, but "the exact same model" points toward recreate. I'll ask one question before going further.
+
+Quick question before I start: which do you want?
+1. Recreate: build an original video with the same look and structure.
+2. Restyle: a new look based on this clip (only if you own it or have rights to it).
+3. Analyze: a spec of what this clip is, with no generation.
+
+One thing to know now, whichever you pick: the file carries no generator tag, so the model that made it is unknown. I can't confirm the exact model from this clip. The most I can offer is an inferred resemblance, and I'd only use that as a soft hint, not as a fact. The catalog model I would route to will come from the live model list, not from the clip.

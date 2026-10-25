@@ -1,0 +1,70 @@
+TRANSCRIPT (dry run): higgsfield-reverse-reference
+REQUEST: Recreate the structure of this 4-shot ad (work/ad4.mp4) with my coffee product. Keep it within budget.
+
+Stage 0. Intake
+Goal is clear: recreate. Type is video. No clarifying question needed.
+Originality check: the reference is a third-party ad. Its shot count, shot lengths, pacing, aspect ratio and palette may be carried over. Its people, logos, brand names, slogans and on-screen text may not. The coffee product is the user's own and replaces the reference subject.
+
+Stage 1. Capture
+$ mkdir -p /home/claude/hf-skills/work/ad4-recreate/ref
+$ cp /home/claude/hf-skills/work/ad4.mp4 /home/claude/hf-skills/work/ad4-recreate/ref/source.mp4
+Working copy made. The original work/ad4.mp4 is not edited.
+
+Bootstrap
+$ command -v higgsfield ffprobe ffmpeg python3
+The teardown needs ffprobe, ffmpeg and python3 only. Analysis needs no credentials.
+$ higgsfield account status
+This is needed before any generation. If it reports Session expired or Not authenticated, I ask the user to run higgsfield auth login and wait.
+
+Stage 2. Measure
+$ python3 -I /home/claude/hf-skills/scripts/teardown_media.py /home/claude/hf-skills/work/ad4-recreate/ref/source.mp4 --out /home/claude/hf-skills/work/ad4-recreate/ref
+Returned: 1080x1920 (observed); 9:16 (derived); 12.1 s (observed); 4 shots at 3.0, 3.1, 2.9 and 3.1 s (derived); palette #3b2a20 at 0.35 and #c49a6c at 0.25 (derived).
+
+Stage 3. Read
+The helper gives measured fields only. Shot types, camera moves, lighting, grade, typography, pacing and audio are read from frames, and the frame read is not in this run's observations. The next step is to open ref/contact_sheet.jpg and the first, a middle and the last frame of each shot. Those fields stay unknown and out of the prompts until then.
+$ ls /home/claude/hf-skills/work/ad4-recreate/ref
+
+Stage 4. Grade (ledger.md)
+| id | claim | grade | evidence | used as |
+|----|-------|-------|----------|---------|
+| L1 | 9:16, 1080x1920 | observed | ffprobe | hard |
+| L2 | 12.1 s | observed | ffprobe | hard |
+| L3 | 4 shots, 3.0 / 3.1 / 2.9 / 3.1 s | derived | scene cuts at threshold 0.30 | hard |
+| L4 | palette #3b2a20 (0.35), #c49a6c (0.25) | derived | sampled frames | hard |
+| L5 | shot types, camera moves, lighting, grade, text zones | unknown | frames not yet read | omit |
+| L6 | audio structure | unknown | not analyzed | omit |
+| L7 | generator model, prompt, seed | unknown | no file metadata checked | omit |
+| L8 | recognizable people, logos, brand names, on-screen text | unknown | frames not yet checked | excluded until checked |
+
+No inference is kept yet, so no demotion is needed. L8 stays excluded until the frame read clears it.
+
+Stage 5. Spec (spec.md, written to /home/claude/hf-skills/work/ad4-recreate/spec.md)
+Goal: recreate
+Output: video, 9:16, 1080x1920, about 12.1 s, 4 shots
+Hard constraints (observed/derived): 9:16; about 12.1 s; 4 shots of about 3.0, 3.1, 2.9 and 3.1 s; palette anchored on #3b2a20 and #c49a6c; the user's coffee product as the subject.
+Soft hints (inferred): none graded yet.
+Exclusions (originality gate): any recognizable person, logo, brand name, slogan or verbatim on-screen text from the reference. Reference media is not uploaded, because the goal is recreate and not restyle.
+Open questions: shot type and camera per shot; lighting; grade; text zones; audio; budget ceiling; model choice.
+Shot list: 1 | 3.0 s | shot type unknown | camera unknown | light unknown | action: coffee product | text zone unknown
+           2 | 3.1 s | shot type unknown | camera unknown | light unknown | action: coffee product | text zone unknown
+           3 | 2.9 s | shot type unknown | camera unknown | light unknown | action: coffee product | text zone unknown
+           4 | 3.1 s | shot type unknown | camera unknown | light unknown | action: coffee product | text zone unknown
+Plan: not yet, see Stage 6.
+
+Stage 6. Plan
+This is a four-job plan, so it needs plan.json, the refine_loop dry run, and an explicit approval of the total before anything is created.
+$ higgsfield model list
+$ higgsfield model get <chosen-model> --json
+The model is picked from this live catalog by duration, 9:16 output, and image input. I will not name a model from memory. The catalog result is not in this run's observations, so no model is chosen yet.
+Write plan.json to /home/claude/hf-skills/work/ad4-recreate/plan.json with one job per shot: job | model | cost | notes. Cost stays blank until the model is chosen.
+$ higgsfield generate cost <chosen-model> ... (same flags as the create command, for all four jobs)
+$ python3 -I /home/claude/hf-skills/scripts/refine_loop.py --ref /home/claude/hf-skills/work/ad4-recreate/ref/teardown.json --plan /home/claude/hf-skills/work/ad4-recreate/plan.json --dry-run
+I will not run the refine_loop dry run yet. Its output needs a real model in plan.json, and the output goes into the plan.
+
+Before I can present the plan I need the next steps done. I read the frames and fill L5 and L8. I choose the model and print the cost. Then I attach the dry-run output and the total.
+
+Questions for the user (one set, for this skill only):
+1. What is the budget ceiling in your currency for the full four-shot run? "Within budget" has no number yet.
+2. Confirm that the coffee product images and any product photos can be used as the subject.
+
+Status: waiting. No job has been created and no generation has run. I return with the frame read, the chosen model, the cost total, the refine_loop dry-run output and the plan for approval.

@@ -1,0 +1,23 @@
+The goal is "analyze" and the user said not to generate, so stages 6 and 7 (plan and generate) are skipped. Stages 0 to 5 run.
+
+$ mkdir -p work/b/ref && cp work/b.mp4 work/b/ref/copy.mp4
+Working copy made; the original work/b.mp4 is not edited.
+
+$ python3 -I scripts/teardown_media.py work/b/ref/copy.mp4 --out work/b/ref
+Measured (observations): 1080x1350 observed; 4:5 derived; 9.5 s observed; 3 shots derived (about 3.2 s average); palette #ffffff (0.5) and #ff5a1f (0.2) derived.
+
+Next I would look at the contact sheet and the first, last, and one mid-shot frame. Shot types, camera, lighting, typography, and pacing are recorded only after I look. They are not in the observations, so I will not state them yet.
+
+Ledger (work/b/ledger.md), what is measured so far:
+L1 | 4:5, 1080x1350 | observed | ffprobe | hard
+L2 | 3 shots, avg ~3.2 s | derived | scene cuts | hard
+L3 | ~9.5 s total | observed | ffprobe | hard
+L4 | white and orange #ff5a1f dominate the palette | derived | sampled frames | hard
+Demotion: none yet.
+
+Summary for you (analysis only):
+- Format: 4:5 portrait, 1080x1350, about 9.5 s, 3 shots of roughly equal length.
+- Palette: mostly white (about half the sampled frames), with orange #ff5a1f as the accent (about a fifth).
+- Still open: shot types, camera moves, lighting, text layout, and audio. These need the frame review before I can describe them.
+
+The full ledger and spec stay on disk at work/b/ledger.md and work/b/spec.md. I will not generate anything.

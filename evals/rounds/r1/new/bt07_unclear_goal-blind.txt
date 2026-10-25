@@ -1,0 +1,9 @@
+Intake
+Type: video, work/x.mp4.
+Goal: not stated. The request is only "look at this (work/x.mp4)".
+
+The goal is unclear, so I stop at Stage 0 and ask one compact question:
+
+Do you want me to recreate, restyle, or analyze work/x.mp4?
+
+No command runs until you answer.

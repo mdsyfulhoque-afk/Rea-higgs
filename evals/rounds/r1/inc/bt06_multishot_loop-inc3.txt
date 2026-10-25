@@ -1,0 +1,83 @@
+Skill: higgsfield-reverse-reference v0.13.0
+Request: Recreate the structure of this 4-shot ad (work/ad4.mp4) with my coffee product. Keep it within budget.
+
+Stage 0 Intake
+Goal: recreate (clear from "recreate the structure"). Type: video (work/ad4.mp4). No question needed; continue.
+
+Bootstrap
+$ command -v higgsfield ffprobe ffmpeg python3
+Output is not in the observations. If higgsfield is missing, I would run the install line from the skill: curl -fsSL https://raw.githubusercontent.com/higgsfield-ai/cli/main/install.sh | sh
+$ higgsfield account status
+Output is not in the observations. If it shows "Session expired" or "Not authenticated", I ask you to run `higgsfield auth login` and wait. Nothing downstream runs until auth is confirmed.
+
+Stage 1 Capture
+Working copy only; the original is never edited.
+$ mkdir -p work/ref && cp work/ad4.mp4 work/ref/ad4.mp4
+
+Stage 2 Measure
+$ python3 -I scripts/teardown_media.py work/ref/ad4.mp4 --out work/ref
+Tool returned (observations):
+- 1080x1920, observed
+- 9:16, derived
+- 12.1 s, observed
+- 4 shots, derived: 3.0, 3.1, 2.9, 3.1 s
+- palette: #3b2a20 (0.35), #c49a6c (0.25), derived
+Helper also wrote teardown.json, frame_XX.jpg, contact_sheet.jpg to work/ref.
+
+Stage 3 Read
+I open the contact sheet and the first, last, and one mid-shot frame myself.
+$ (view) work/ref/contact_sheet.jpg
+$ (view) work/ref/frame_01.jpg
+$ (view) work/ref/frame_04.jpg
+$ (view) work/ref/frame_08.jpg
+The observations contain no frame readings yet. Shot types, camera motion, lighting, grade, typography, pacing and audio are NOT recorded. They stay unknown until I read the frames. Camera motion needs at least two frames to judge.
+
+Stage 4 Grade (ledger.md, written to work/ref/ledger.md)
+| id | claim | grade | evidence | used as |
+| L1 | 1080x1920 | observed | teardown_media.py | hard |
+| L2 | 9:16 | derived | 1080/1920 | hard |
+| L3 | 12.1 s | observed | ffprobe | hard |
+| L4 | 4 shots, 3.0/3.1/2.9/3.1 s | derived | scene cuts at default 0.30 | hard, pending contact-sheet check |
+| L5 | palette #3b2a20, #c49a6c | derived | sampled frames | hard |
+| L6 | generator model, prompt, seed | unknown | no file metadata | omit |
+| L7 | shot types, camera, lighting, grade, typography | unknown | frames not yet read | omit until read |
+| L8 | audio structure | unknown | audio not analyzed | omit |
+Originality gate: nothing recorded yet. Faces, logos, brand names and on-screen text can only be found in the frame read, so the exclusion list is empty for now and must be filled before generation.
+Cross-check: L4 is confirmed against the contact sheet before it is kept as hard.
+
+Stage 5 Spec (draft, work/ref/spec.md)
+Goal: recreate
+Output: 9:16, 1080x1920, ~12.1 s, 4 shots of ~3 s
+Hard constraints (observed/derived): 9:16; 1080x1920; ~12.1 s; 4 shots; palette #3b2a20 / #c49a6c as color words
+Soft hints (inferred): none yet
+Exclusions (originality gate): none recorded yet; pending frame read
+Open questions: shot types per shot; camera motion; lighting; typography; audio; generator identity (stays unknown)
+Shot list: # | length | shot type | camera | light | action | text zone
+  1 | ~3.0 s | pending | pending | pending | your coffee product | pending
+  2 | ~3.1 s | pending | pending | pending | your coffee product | pending
+  3 | ~2.9 s | pending | pending | pending | your coffee product | pending
+  4 | ~3.1 s | pending | pending | pending | your coffee product | pending
+Shot rows stay pending until the frames are read. The skill says not to fill them with guesses.
+
+Stage 6 Plan (no job is created yet)
+$ higgsfield model list
+$ higgsfield model get <candidate> --json
+Choose by capability only: 9:16 output, ~3 s clips, image input if your product photo is used. I do not pick a model from the reference's look.
+Reference video is NOT uploaded. It is analyzed locally only, and this is a recreate goal, not restyle.
+$ higgsfield generate cost --help
+Then, for the chosen model, one cost call per planned shot, using the flags the help text shows:
+$ higgsfield generate cost <chosen-model> ... (shot 1 of 4)
+$ higgsfield generate cost <chosen-model> ... (shot 4 of 4)
+Total cost is not available yet. The model list output is not in the observations, so no model or price is named here.
+
+Plan to present to you:
+- 4 jobs, one per shot, each ~3 s, 9:16
+- Prompts built from the hard constraints and the product you supply
+- Total cost: pending the cost calls above
+- Nothing is created before approval.
+
+Questions for you:
+1. What is the budget ceiling? "Within budget" has no figure yet.
+2. Approve the plan and total once the cost is shown? Multi-job plans need explicit approval of the total first.
+
+I stop here and wait for your answers. Stages 7 (generate) and QA do not run until approval.

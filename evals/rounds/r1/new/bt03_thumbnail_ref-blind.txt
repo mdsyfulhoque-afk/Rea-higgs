@@ -1,0 +1,43 @@
+$ higgsfield account status
+Account is authenticated. Continuing.
+
+Goal: "look like this" is a restyle request for a thumbnail, and the thumbnail skill is style-only anyway. So I'm taking the goal as restyle, with the type as a still image (work/mb.jpg). I will not upload that file to any generator. You haven't said you own it or hold rights to it, and the default is analysis only.
+
+$ mkdir -p work/mb-teardown
+$ cp work/mb.jpg work/mb-teardown/mb.jpg
+Working copy made. The original stays untouched.
+
+$ python3 -I scripts/teardown_media.py work/mb-teardown/mb.jpg --out work/mb-teardown/ref
+
+Measured (observed or derived):
+- 1280x720, 16:9 (derived)
+- Palette: #f6e000 (30%), #d01818 (22%), #101010 (20%), all derived
+
+I'm looking at work/mb-teardown/ref/ and the image itself. For a still, the composition notes matter: thirds placement, text zone, face crop size.
+
+Ledger (kept on disk at work/mb-teardown/ref/ledger.md):
+- L1: 16:9, 1280x720. observed. hard.
+- L2: palette from the measured hex values. derived. hard (as a style constraint).
+- L3: high saturation, saturated yellow-red-black contrast. inferred from the palette and the frame. soft, once a second signal confirms it. Otherwise unknown.
+- L4: large 3-word text, top-left, high weight. observed as a layout (placement and size). The words themselves are excluded.
+- L5: a recognizable creator's face, large in frame. excluded (originality gate).
+- L6: the creator's name and any brand mark. excluded.
+- L7: which generator made the thumbnail. unknown. Not in the file metadata. omit.
+
+Spec summary, for your approval:
+- Goal: restyle. Output: 16:9 YouTube thumbnail, 1280x720.
+- Hard: 16:9; palette built from the measured colors (#f6e000, #d01818, #101010); a large, high-contrast text block in the top-left third, short words.
+- Soft: high saturation, bold punchy contrast.
+- Exclusions: the creator's face, the creator's name, any brand mark, and the reference's exact words. The prompts will not mention any of these.
+- Text: I'll write new original text about budgeting in Dhaka, not copied from the reference.
+- Open: whether a person should appear in the thumbnail. If you want yourself on it, I'd use a Soul Character you train with higgsfield-soul-id. I would not use the reference's face.
+
+Plan (not created yet):
+- Route: higgsfield-youtube-thumbnail, with the reference as style only.
+- Model: to be picked from the live catalog with higgsfield model list, filtered to image models that take a 16:9 output and allow text. I'll check candidates with higgsfield model get <model> --json. I won't name one until the list comes back.
+- Cost: once a model is chosen, I'll print higgsfield generate cost <model> ... for the plan. A thumbnail is one job, so it needs your go-ahead only, not a batch approval.
+
+Nothing has been generated and nothing has been spent. Please confirm:
+1. Is the goal restyle, with the reference used for style only? If you own this image or have rights to it and want it used as input, tell me so.
+2. Do you want a person on the thumbnail? If yes, do you want yourself, using a trained Soul Character?
+3. Do you approve the spec above, and the go-ahead for one thumbnail job once the cost is printed?

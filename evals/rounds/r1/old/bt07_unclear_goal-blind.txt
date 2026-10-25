@@ -1,0 +1,9 @@
+The request is "look at this (work/x.mp4)" with no goal stated. Stage 0 (intake) allows one compact question only when the goal is unclear, so I will not run the teardown yet.
+
+Plain line to the user:
+I can see work/x.mp4. What do you want from it?
+1. Recreate it: a new original version built from its structure.
+2. Restyle it: keep the look and rebuild with your own subject (needs rights to the file if it is used as input).
+3. Analyze it: a breakdown only, with no generation.
+
+Waiting for your answer.

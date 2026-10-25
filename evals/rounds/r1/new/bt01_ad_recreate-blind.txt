@@ -1,0 +1,48 @@
+$ higgsfield account status
+Account is authenticated. Continuing.
+
+Goal is "recreate": you asked for an original version of this ad for Lumen, so I'm taking the goal as recreate and the type as video (reference is work/ref.mp4). I'm not uploading the competitor's file to any generator, because you don't say you own it or hold rights to it.
+
+$ mkdir -p work/lumen-teardown
+$ cp work/ref.mp4 work/lumen-teardown/ref.mp4
+Working copy made. The original stays untouched.
+
+$ python3 -I scripts/teardown_media.py work/lumen-teardown/ref.mp4 --out work/lumen-teardown/ref
+
+Measured (observed or derived):
+- 1080x1920, 9:16 (derived from the observed resolution)
+- 14.02 s, 30 fps
+- 5 shots (derived from scene cuts)
+- Palette: #e9d8c4 (41%), #b98f6a (27%), #2b2420 (18%), all derived
+
+I'm reading work/lumen-teardown/ref/contact_sheet.jpg and the first, last, and one mid-shot frame myself before grading anything.
+
+Ledger (kept on disk at work/lumen-teardown/ref/ledger.md):
+- L1: 9:16, 1080x1920. observed. hard.
+- L2: 14 s, 5 shots. derived. hard.
+- L3: warm neutral palette from the measured hex values. derived. hard.
+- L4: reads as slow push-ins. Only one signal so far, so this is demoted to unknown and omitted, unless motion across frames confirms it. soft if confirmed.
+- L5: reads as shallow depth of field. inferred. soft.
+- L6: generator, prompt, seed, and true lens are unknown. Not stated in the file metadata. omit.
+- L7: audio structure (VO, music bed) is unknown. Not analyzed. omit.
+- L8: competitor wordmark 'GLOWA' on the bottle. excluded.
+- L9: presenter's face in shots 1 and 5. excluded.
+- L10: tagline text 'Skin that speaks'. excluded.
+
+Spec summary, for your approval:
+- Goal: recreate. Output: 9:16 short-form video, about 14 s, 5 shots.
+- Hard: 9:16, ~14 s, 5 shots, warm neutral palette built from the measured colors, soft window-style light, macro product shots in the close-up positions.
+- Soft: slow push-in feel, shallow depth of field.
+- Exclusions: the GLOWA wordmark, the presenter's face, the tagline text. The prompts will describe an original Lumen product and an original person-free scene instead. If you need a person on screen, it will be a Soul Character you train with higgsfield-soul-id, never the reference face.
+- Open: whether the voiceover is synthetic, and the original lens.
+
+Plan (not created yet):
+- Route: higgsfield-generate, for a 5-shot video from the approved shot list.
+- Model: to be picked from the live catalog. I'll run higgsfield model list and then higgsfield model get <model> --json on the candidates that support 9:16, about 14 s, and no image input.
+- Cost: once a model is chosen, I'll print the total with higgsfield generate cost <model> ... for the full 5-shot plan.
+- Brand: Lumen. The brand's palette and type are not in this session, so I'll ask for them if you want them matched.
+
+Nothing has been generated and nothing has been spent. Please confirm:
+1. Is the goal recreate? If you meant restyle, tell me whether you own the source footage or hold rights to it.
+2. Do you approve the spec above (the exclusions, and an original Lumen subject in place of the competitor's)?
+3. Once I have the model list and cost total, do you approve the multi-job plan?

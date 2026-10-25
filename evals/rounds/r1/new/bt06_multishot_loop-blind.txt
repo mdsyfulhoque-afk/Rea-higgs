@@ -1,0 +1,42 @@
+Intake
+Goal: recreate (the request asks to recreate the structure of the 4-shot ad).
+Type: video, work/ad4.mp4. Multi-shot plan.
+
+$ command -v higgsfield ffprobe ffmpeg python3
+$ mkdir -p work/ad4-ref
+$ cp work/ad4.mp4 work/ad4-ref/reference.mp4
+$ python3 -I scripts/teardown_media.py work/ad4-ref/reference.mp4 --out work/ad4-ref
+$ higgsfield account status
+
+Teardown result: 1080x1920 (observed), 9:16 (derived), 12.1 s (observed), 4 shots at 3.0, 3.1, 2.9 and 3.1 s (derived), palette #3b2a20 at 0.35 and #c49a6c at 0.25 (derived).
+
+Frame reading: the contact sheet and the first, last and one mid-shot frame would be read here. This run returns no frame content, so no shot type, camera, lighting or typography entry is recorded yet, and none of them becomes a constraint.
+
+Ledger (work/ad4-ref/ledger.md):
+| L1 | 9:16, 1080x1920 | observed | teardown_media.py | hard |
+| L2 | 4 shots, 2.9 to 3.1 s each | derived | scene cuts > 0.30 | hard |
+| L3 | 12.1 s total | observed | teardown_media.py | hard |
+| L4 | palette #3b2a20 (0.35), #c49a6c (0.25) | derived | sampled frames | hard |
+| L5 | generator model, prompt, seed | unknown | not in file metadata | omit |
+
+Spec (work/ad4-ref/spec.md):
+Goal: recreate
+Output: 9:16, 12.1 s, 4 shots
+Hard constraints: 1080x1920; about 12 s; 4 shots of about 3 s each; palette #3b2a20 and #c49a6c.
+Soft hints: none yet.
+Exclusions: none recorded, because no frame has been read in this run.
+Open questions: shot content and camera for each shot; the coffee product photo; the budget ceiling; the model.
+
+Plan: the reference video is not uploaded anywhere. Each of the 4 shots gets its own prompt from the shot list, and the coffee product takes the place of the original subject. Models come from the live catalog, chosen by capability, not by how the reference looks.
+
+$ higgsfield model list
+$ higgsfield model get <candidate-model> --json
+$ higgsfield generate create --help
+$ higgsfield generate cost <chosen-model> ...
+
+The cost command uses the same flags as the create command, once per shot job. I stop here. Four jobs make this a multi-job plan, so no job is created until I have shown the total and you approve it.
+
+To the user:
+This is a plan for a 4-shot, 12 s, 9:16 coffee ad that keeps the reference's structure: four clips of about 3 s each, palette #3b2a20 and #c49a6c, with no copy of the original people, logos or text.
+Cost: I will show the total for each candidate model before any job runs. Nothing has been created.
+To finish the plan I need three things: a photo of your coffee product, your budget ceiling, and your approval of the total once it is shown.

@@ -1,0 +1,73 @@
+DRY-RUN TRANSCRIPT: higgsfield-reverse-reference
+Request: Recreate the structure of this 4-shot ad (work/ad4.mp4) with my coffee product. Keep it within budget.
+
+Stage 0 - Intake
+Goal is recreate and the type is video (work/ad4.mp4). The goal is clear, so no intake question is needed. "Within budget" has no figure attached, so a spend ceiling must be asked for before any cost approval.
+
+Bootstrap
+$ command -v higgsfield ffprobe ffmpeg python3
+$ higgsfield account status
+If higgsfield were missing I would run the install line from the skill, and if the account showed "Session expired" or "Not authenticated" I would ask the user to run `higgsfield auth login` and wait. The OBSERVATIONS block does not include output for these two checks, so they are treated as passed for the rest of this dry run.
+
+Stage 1 - Capture
+$ mkdir -p work/cap && cp work/ad4.mp4 work/cap/ref.mp4
+The original work/ad4.mp4 is not edited.
+
+Stage 2 - Measure
+$ python3 -I scripts/teardown_media.py work/cap/ref.mp4 --out work/ref
+Returned (from OBSERVATIONS):
+- 1080x1920, observed
+- 9:16, derived
+- 12.1 s, observed
+- 4 shots, derived: 3.0, 3.1, 2.9, 3.1 s
+- palette #3b2a20 (0.35) and #c49a6c (0.25), derived
+teardown.json, frame_XX.jpg and contact_sheet.jpg are written to work/ref.
+
+Stage 3 - Read
+I open work/ref/contact_sheet.jpg and the first, a mid-shot and the last frame. Shot type, camera motion, lighting, grade, typography, pacing and audio structure are not in OBSERVATIONS, so none of them is recorded yet. Until I have read the frames they stay unknown and do not go into the prompts.
+
+Stage 4 - Grade (work/ref/ledger.md)
+| id | claim | grade | evidence | used as |
+|----|-------|-------|----------|---------|
+| L1 | 1080x1920 | observed | teardown_media | hard |
+| L2 | 9:16 | derived | from L1 | hard |
+| L3 | 12.1 s | observed | teardown_media | hard |
+| L4 | 4 shots, 3.0/3.1/2.9/3.1 s | derived | scene cuts at default 0.30 | hard |
+| L5 | palette #3b2a20 0.35, #c49a6c 0.25 | derived | sampled frames | hard |
+| L6 | shot types, camera, lighting, pacing | unknown | frames not yet read | omit |
+| L7 | audio structure | unknown | not analyzed | omit |
+| L8 | generator model, prompt, seed | unknown | no file metadata | omit |
+No inference is recorded, so the demotion rule has nothing to apply to yet. Originality-gate entries (faces, logos, on-screen text) are added only after the frames are read.
+
+Stage 5 - Spec (work/spec.md)
+Goal: recreate
+Output: video, 9:16, 1080x1920, 12.1 s, 4 shots
+Hard constraints (observed/derived): L1-L5
+Soft hints (inferred): none yet
+Exclusions (originality gate): none recorded yet
+Open questions: shot types, camera moves, lighting, audio; spend ceiling; coffee product image or description
+Shot list: 4 rows, lengths 3.0 / 3.1 / 2.9 / 3.1 s, with shot type, camera, light and action left blank until the frames are read
+
+Stage 6 - Plan
+Four jobs, one per shot, so plan.json is required.
+$ higgsfield model list
+$ higgsfield model get <model> --json
+The model is chosen from the live catalog by capability: 9:16, about 3 s per shot, and image input for the coffee product. No model name is given here because the catalog output is not in OBSERVATIONS.
+$ higgsfield generate cost <model> <same flags as the create command> (one call per job, summed for the total)
+Writes work/plan.json with four jobs. Each job's prompt is built from hard constraints and the shot list only. The reference media is not uploaded, because this is a recreate goal.
+$ python3 -I scripts/refine_loop.py --ref work/ref/teardown.json --plan work/plan.json --dry-run
+The dry-run output (commands and call budget) goes into the plan. Its contents are not in OBSERVATIONS.
+
+Plan to present (not created)
+- Structure: 4 shots, 9:16, 1080x1920, about 12.1 s
+- Jobs: 4, one per shot, model from the live catalog
+- Cost: total from the summed `higgsfield generate cost` output, not yet returned
+- Call budget: from the refine_loop dry-run, not yet returned
+- Reference: analyzed locally only, never uploaded
+
+Questions for the user (no generation has been run, and nothing is created before approval)
+1. What is the spend ceiling? "Within budget" has no figure.
+2. Send the coffee product photo, or describe the product, so it can be used as the image input.
+3. Approve the plan total once it is shown, and I will then create the jobs. Shot-level details such as camera and lighting will be filled in from the frame read before the spec is final.
+
+Stopping here and waiting for approval. No paid job has been created.

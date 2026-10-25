@@ -1,0 +1,47 @@
+$ higgsfield account status
+Account is authenticated. Continuing.
+
+Goal: restyle. Type: video (work/mine.mp4). You've said you shot this video yourself, so you own it. That is the condition the skill sets for passing the reference as input on a restyle goal, so I can use the file as --video input in the generation step, not only for analysis.
+
+$ mkdir -p work/mine-teardown
+$ cp work/mine.mp4 work/mine-teardown/mine.mp4
+Working copy made. The original stays untouched.
+
+$ python3 -I scripts/teardown_media.py work/mine-teardown/mine.mp4 --out work/mine-teardown/ref
+
+Measured (observed or derived):
+- 1920x1080, 16:9 (derived), 10.0 s (observed)
+- 3 shots (derived from scene cuts)
+- Source palette: #dcdcd2 (50%), #8a8f80 (30%), both derived. This is the current look, a pale and muted daylight palette.
+
+I'm reading work/mine-teardown/ref/contact_sheet.jpg and the first, last, and one mid-shot frame myself. For camera motion, I need at least two frames per shot before I grade it.
+
+Ledger (kept on disk at work/mine-teardown/ref/ledger.md):
+- L1: 1920x1080. observed. hard.
+- L2: 16:9. derived. hard.
+- L3: 10.0 s. observed. hard.
+- L4: 3 shots. derived. hard.
+- L5: source palette #dcdcd2 / #8a8f80 is pale and muted. derived. This is the starting point for the restyle, not the target. Not a hard constraint on the output.
+- L6: the target look, moody night. Your direction, not an observation. Hard as the requested look, with the palette, lighting, and grade moved toward night.
+- L7: camera and lighting per shot. Not graded yet. Pending the frame reads above.
+- L8: audio. Not analyzed. unknown. omit.
+- L9: the generator that made the original video. Not applicable, you shot it. unknown. omit.
+
+Spec summary, for your approval:
+- Goal: restyle. Output: 16:9, 10 s, 3 shots, same structure as the original.
+- Hard: 16:9; 10 s; 3 shots with the same cut rhythm as the source; a moody night look with a darker palette and low-key light.
+- Soft: the source's shot framing and camera moves kept where they read clearly; the source's pale palette used only as a reference point.
+- Exclusions: none so far. Your own footage, so nothing is excluded by default. If a person is on screen, I'll keep them as they are in the source, since you shot it.
+- Open: whether you want the night look to keep the same framing and motion, or allow changes to the camera. Whether the audio should stay. Anything I can't see yet in the frames.
+
+Route: higgsfield-generate, one shot at a time, with the source as video input per shot.
+
+Plan (not created yet):
+- Model: to be picked from the live catalog with higgsfield model list, filtered to video-to-video or image-plus-video models that take a 16:9 output of about 3 to 4 s per shot. I'll check candidates with higgsfield model get <model> --json. I won't name one until the list comes back.
+- Cost: once a model is chosen, I'll print higgsfield generate cost <model> ... for each of the 3 shot jobs and the total. Three jobs is a multi-job plan, so I need your explicit approval of the total before any job starts.
+- Closed loop: after approval, I'd write a plan.json and run python3 -I scripts/refine_loop.py --ref work/mine-teardown/ref/teardown.json --plan work/mine-teardown/plan.json --out work/mine-teardown/loop --dry-run first, to show the commands and the call budget. Then I'd run it for real, and open judge.md to inspect the frames for look and motion myself.
+
+Nothing has been generated and nothing has been spent. Please confirm:
+1. Do you approve the spec above, with the night look as the target and the source used as structure?
+2. Should the camera moves and framing stay exactly as in the source, or can they change?
+3. Do you approve moving to model selection and the cost total for the three shot jobs?

@@ -1,0 +1,24 @@
+$ python3 -I scripts/teardown_media.py work/r.mp4 --out work/r/ref
+Output: error: ffprobe not found on PATH; teardown degrades to visual inspection only.
+
+Bootstrap rule 3: missing media tools degrade the teardown to visual inspection. I will say so in the ledger as unknown. I will not install ffmpeg or other software unprompted, so I am not retrying the helper.
+
+Plain line to the user:
+The measurement tools (ffprobe and ffmpeg) are not installed here, so I can't measure the reel or pull frames from it. I can't record resolution, aspect ratio, duration, or shot count from the file.
+
+Ledger (work/r/ledger.md) with no measured facts:
+L1 | resolution and aspect ratio | unknown | ffprobe missing | omit
+L2 | duration | unknown | ffprobe missing | omit
+L3 | shot count and lengths | unknown | ffmpeg missing, no frames | omit
+L4 | palette | unknown | no frames | omit
+L5 | camera, lighting, text, audio | unknown | no frames | omit
+
+Spec (work/r/spec.md): Goal: recreate. Hard constraints: none, because nothing is observed or derived yet. Soft hints: none. Exclusions: none recorded, because no frames were checked for logos, faces, or verbatim text. Open questions: all of the L1 to L5 items above.
+
+Stopping point. I have not planned or generated anything. Cost gate and model routing are skipped because a spec with no hard constraints can't be checked later.
+
+Questions for you:
+1. Should I install ffmpeg (which includes ffprobe) so the teardown can run? This needs your approval.
+2. If you can't install it, send the reel's aspect ratio, length, and number of cuts, or screenshots of the first, middle, and last frames. I will record them as observed from your input, not as measured.
+3. What is the budget ceiling for the bakery reel?
+4. Send the bakery's product photos for the reel.

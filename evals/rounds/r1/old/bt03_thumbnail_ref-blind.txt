@@ -1,0 +1,53 @@
+Intake
+Goal: recreate, style only. The user wants the thumbnail to look like the reference. Type: image, thumbnail.
+The reference shows a recognizable creator and is a third party's work, and the user did not say they own it or hold rights. So it is analyzed locally and never passed to --image. The thumbnail route is style-only.
+
+Bootstrap
+$ command -v ffprobe ffmpeg python3
+
+Capture
+$ mkdir -p work/ref && cp work/mb.jpg work/ref/mb.jpg
+
+Measure
+$ python3 -I scripts/teardown_media.py work/ref/mb.jpg --out work/ref
+
+Helper output:
+- 1280x720, observed. 16:9, derived.
+- Palette #f6e000 (0.30), #d01818 (0.22), #101010 (0.20), derived. As color words: bright yellow, red, near black.
+- A recognizable creator's face. Excluded.
+- Large 3-word text top-left. The text zone is structure. The words are verbatim text and are excluded.
+- High saturation. Read from the frame, so it is inferred.
+
+Read
+I read the frame myself for composition. I record only the text zone as a structure: top-left, three words, large. I do not record the face placement, the exact crop or the headline words, because those are the reference's exact composition and verbatim text.
+
+Grade (written to work/ref/ledger.md)
+| id | claim | grade | evidence | used as |
+| L1 | 1280x720, 16:9 | observed / derived | ffprobe | hard |
+| L2 | palette #f6e000, #d01818, #101010 | derived | sampled frame | hard |
+| L3 | large 3-word text zone, top-left | observed | frame | hard (structure only) |
+| L4 | reads as high saturation, bold | inferred | single signal, demoted to soft | soft |
+| L5 | recognizable creator's face | observed | frame | excluded |
+| L6 | headline words (verbatim) | observed | frame | excluded |
+| L7 | exact face placement and crop | observed | frame | excluded (third-party composition) |
+
+Spec (written to work/ref/spec.md)
+Goal: recreate (style only)
+Output: thumbnail, 16:9, 1280x720
+Hard constraints: 16:9; palette #f6e000, #d01818, #101010; large three-word headline in a top-left text zone
+Soft hints: reads as high saturation and bold
+Exclusions: the creator's face and identity; the reference's headline words; the exact face placement and crop; any MrBeast name or branding
+Open questions: whether the thumbnail shows a person; the headline wording for a video about budgeting in Dhaka
+
+Next steps, after your answers
+If you want a person, it must be a Soul Character you trained with higgsfield-soul-id. Never the reference's face. If you do not, the thumbnail has no person.
+Then, one downstream skill only: higgsfield-youtube-thumbnail. Its plan follows the same route as every other job:
+$ higgsfield model list
+$ higgsfield model get <candidate> --json
+$ higgsfield generate cost <model> ...   (the total is shown before any paid job)
+
+Questions for you
+1. Should the thumbnail show a person? If yes, name the Soul Character you trained. If no, it will be face-free.
+2. What three words should the headline say? Give me the wording, or I will propose a short budgeting headline for Dhaka.
+
+Waiting for your answers. Nothing is generated yet.

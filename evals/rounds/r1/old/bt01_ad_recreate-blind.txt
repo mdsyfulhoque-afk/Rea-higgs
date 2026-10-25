@@ -1,0 +1,62 @@
+Intake
+Goal: recreate (the user asks for an original version of the ad). Type: video ad, 14 s.
+The reference is a competitor's ad, not the user's, so it is analyzed locally and never passed to --image or --video.
+
+Bootstrap
+$ command -v higgsfield
+$ higgsfield account status
+If higgsfield is missing, install it with the install script first. If the status shows Session expired or Not authenticated, I ask the user to run higgsfield auth login and wait. The teardown itself needs no credentials, so I continue with the local analysis.
+$ command -v ffprobe ffmpeg python3
+
+Capture
+$ mkdir -p work/ref && cp work/ref.mp4 work/ref/ref.mp4
+
+Measure
+$ python3 -I scripts/teardown_media.py work/ref/ref.mp4 --out work/ref
+
+Helper output:
+- 1080x1920, observed (ffprobe). Aspect 9:16, derived.
+- 14.02 s, observed.
+- 5 shots, derived from scene cuts.
+- Palette #e9d8c4 (0.41), #b98f6a (0.27), #2b2420 (0.18), derived.
+
+Read
+I read the contact sheet and the first, last and one mid-shot frame myself.
+- Shots 1 and 5 show a presenter's face. Excluded.
+- The wordmark GLOWA is on the bottle. Excluded.
+- The tagline "Skin that speaks" is on screen. Excluded.
+- Camera moves, lighting direction and pacing are not in this teardown output. Motion needs at least two frames per shot to judge, so these stay unknown and stay out of the prompts until I judge them.
+
+Grade (written to work/ref/ledger.md)
+| id | claim | grade | evidence | used as |
+| L1 | 9:16, 1080x1920 | observed | ffprobe | hard |
+| L2 | 14.02 s | observed | ffprobe | hard |
+| L3 | 5 shots | derived | scene cuts > 0.30 | hard |
+| L4 | palette #e9d8c4, #b98f6a, #2b2420 | derived | sampled frames | hard |
+| L5 | presenter face in shots 1 and 5 | observed | frames 01, 05 | excluded |
+| L6 | wordmark GLOWA on bottle | observed | contact sheet | excluded |
+| L7 | tagline "Skin that speaks" | observed | contact sheet | excluded |
+| L8 | camera moves, light, pacing per shot | unknown | not yet judged across frames | omit |
+
+Spec (written to work/ref/spec.md)
+Goal: recreate
+Output: video ad, 9:16, about 14 s, 5 shots
+Hard constraints: 1080x1920; 14.02 s; 5 shots; palette #e9d8c4, #b98f6a, #2b2420 used as warm neutral color words
+Soft hints: none graded yet
+Exclusions: presenter face (shots 1 and 5); GLOWA name and wordmark; tagline "Skin that speaks"
+Open questions: camera moves and lighting per shot; whether the Lumen ad needs a person; the Lumen headline copy, which I will write as original text and not reuse the competitor's tagline
+
+Plan (brand Lumen)
+One prompt per shot, five shots, no --count. Model choice comes from the live catalog, not from the look of the reference.
+$ higgsfield model list
+$ higgsfield model get <candidate> --json
+I pick candidates that output 9:16, cover about 14 s across five clips, and need no image input, since no reference media is uploaded.
+$ higgsfield generate cost <model> ...   (same flags as the create command, for the whole five-job plan)
+
+Message to the user
+The plan is ready: five 9:16 shots, about 14 seconds, with the reference's shot count and palette, and no presenter, GLOWA name or competitor tagline. The cost command gives the total for the five jobs, and that total is shown here before anything is generated.
+Two questions:
+1. Do you approve the five-job plan and its total cost?
+2. Should the Lumen ad show a person? If yes, name the Soul Character you trained with higgsfield-soul-id. If no, the shots will be product-only.
+
+Waiting for your answers. Nothing is generated yet.

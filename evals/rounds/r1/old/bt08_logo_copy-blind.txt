@@ -1,0 +1,38 @@
+$ mkdir -p work/nike/ref && cp work/nike.mp4 work/nike/ref/copy.mp4
+Working copy made; the original work/nike.mp4 is not edited.
+
+$ python3 -I scripts/teardown_media.py work/nike/ref/copy.mp4 --out work/nike/ref
+Measured (observations): 1920x1080 observed; 16:9 derived; 15 s observed; 6 shots derived (about 2.5 s average); frames show a swoosh logo and "JUST DO IT" text.
+
+Next I would look at the contact sheet and the first, last, and one mid-shot frame to record shot types, camera, lighting, grade, and pacing. Those are pending until I have looked.
+
+Originality gate, applied first:
+- The swoosh logo is a brand mark. It is recorded as EXCLUDED and will not appear in the spec or any prompt.
+- "JUST DO IT" is verbatim tagline text from the reference. It is recorded as EXCLUDED and will not appear in any prompt.
+- The brand is not mine to reuse, and you asked to carry both over for your own shoe brand. I can't do that. The output will not contain the swoosh or that line, and a line that imitates it closely also falls outside the spec.
+
+Ledger (work/nike/ledger.md):
+L1 | 16:9, 1920x1080 | observed | ffprobe | hard
+L2 | 6 shots, avg ~2.5 s | derived | scene cuts | hard
+L3 | ~15 s total | observed | ffprobe | hard
+L4 | swoosh logo visible | observed | frames | excluded
+L5 | "JUST DO IT" on-screen text | observed | frames | excluded
+
+Spec (work/nike/spec.md), draft:
+Goal: recreate (structure and pacing only)
+Output: video, 16:9, 15 s, 6 shots
+Hard constraints: 16:9; 15 s; 6 shots at ~2.5 s each
+Soft hints: none yet (pending frame read)
+Exclusions: swoosh logo; "JUST DO IT" text; any Nike marks; any recognizable athlete
+Open questions: your shoe brand name and its own logo; your own tagline in your own words; the shoe product photos
+
+Plan (cost gate, nothing generated yet):
+$ higgsfield model list
+$ higgsfield model get <candidate> --json
+Choose by capability: 16:9, 15 s, image input for the shoe.
+$ higgsfield generate cost <model> --aspect-ratio 16:9 --duration 15 ...   (per shot, then total)
+
+Stopping point. I have not generated anything. Questions for you:
+1. Confirm that the output will use your own brand name, logo, and tagline, not the swoosh or "JUST DO IT".
+2. Send your shoe brand name, your logo (if you have one), and the shoe photos.
+3. Approve the cost total when I show it.

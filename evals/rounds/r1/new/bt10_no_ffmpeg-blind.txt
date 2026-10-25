@@ -1,0 +1,38 @@
+Intake
+Goal: recreate. Type: video, work/r.mp4. Business: bakery.
+
+Bootstrap: the media tools are checked first. Missing media tools degrade the teardown to visual inspection, and I do not install software on my own.
+
+$ command -v ffprobe ffmpeg python3
+$ mkdir -p work/reel-ref
+$ cp work/r.mp4 work/reel-ref/reference.mp4
+$ python3 -I scripts/teardown_media.py work/reel-ref/reference.mp4 --out work/reel-ref
+
+Teardown result: error: ffprobe not found on PATH. The teardown degrades to visual inspection only.
+
+Visual inspection needs frames, and frame extraction needs ffmpeg. This tool set cannot open the .mp4 directly, so no frame can be read from it.
+
+Ledger (work/reel-ref/ledger.md):
+| L1 | resolution, aspect ratio | unknown | ffprobe missing | omit |
+| L2 | duration | unknown | ffprobe missing | omit |
+| L3 | shot count and lengths | unknown | ffprobe missing, no frames | omit |
+| L4 | palette | unknown | ffprobe missing | omit |
+| L5 | camera, lighting, typography, pacing, audio | unknown | no frames readable | omit |
+| L6 | generator model, prompt, seed | unknown | not in file metadata | omit |
+
+Spec (work/reel-ref/spec.md):
+Goal: recreate
+Output: not determined
+Hard constraints: none. Every measurable claim is unknown.
+Soft hints: none.
+Exclusions: none recorded.
+Open questions: aspect ratio; duration; shot count; palette; camera; lighting; typography; pacing; audio; the bakery product to feature; the bakery name; budget ceiling.
+
+No plan is drafted, because a plan needs hard constraints. No cost call and no generation run.
+
+To the user:
+I could not measure the reel. The teardown needs ffprobe, which is not installed here. I have not installed anything.
+Choose one of these:
+1. Approve installing ffmpeg, which includes ffprobe, so I can run a measured teardown.
+2. Send three to five screenshots from the reel: the opening frame, a middle frame and the last frame.
+Also tell me the bakery name, the product to feature and any budget ceiling. The plan needs them.

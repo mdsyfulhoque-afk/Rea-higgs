@@ -1,0 +1,86 @@
+Request: Recreate the structure of this 4-shot ad (work/ad4.mp4) with my coffee product. Keep it within budget.
+
+Stage 0. Intake
+Goal is clear: recreate. Type is video (packaged app and web page do not apply). No clarifying question needed for the goal.
+Originality gate applies: structure, pacing, palette, and shot rhythm are carried over. No people, logos, brand marks, characters, or on-screen text from the reference.
+The reference is analyzed locally. It is not passed to --video because the goal is recreate, not restyle.
+
+Stage 1. Capture
+$ mkdir -p /home/claude/hf-skills/work/ref
+$ cp /home/claude/hf-skills/work/ad4.mp4 /home/claude/hf-skills/work/ref/ad4_copy.mp4
+Working copy made. The original work/ad4.mp4 is not edited.
+
+Bootstrap checks
+$ command -v higgsfield
+$ command -v ffprobe ffmpeg python3
+$ higgsfield account status
+Tool and media checks are needed before the teardown. If account status shows "Session expired" or "Not authenticated", I would ask the user to run "higgsfield auth login" and wait. The result of these checks is not in the observations, so the rest of this transcript assumes the CLI is present, the media tools are present, and the account is authenticated.
+
+Stage 2. Measure
+$ python3 -I scripts/teardown_media.py /home/claude/hf-skills/work/ref/ad4_copy.mp4 --out /home/claude/hf-skills/work/ref
+Helper output (from observations):
+  resolution 1080x1920, observed
+  aspect ratio 9:16, derived
+  duration 12.1 s, observed
+  shots 4, derived (3.0, 3.1, 2.9, 3.1 s; sum 12.1 s, consistent with duration)
+  palette #3b2a20 (0.35) and #c49a6c (0.25), derived
+Helper wrote teardown.json, frame_XX.jpg, and contact_sheet.jpg in work/ref.
+
+Stage 3. Read
+I would open the contact sheet and at least the first frame, the last frame, and one mid-shot frame of each shot. The frame readings are not in the observations, so I cannot record shot types, camera moves, lighting, grade, typography, or audio structure yet. Each of those stays pending until I have looked at the frames. Motion needs at least two frames per shot.
+
+Stage 4. Grade
+Ledger (work/ref/ledger.md), current state:
+| L1 | 1080x1920 | observed | ffprobe via teardown | hard |
+| L2 | 9:16 | derived | from L1 | hard |
+| L3 | 12.1 s total | observed | teardown | hard |
+| L4 | 4 shots, about 3 s each | derived | scene cuts, sum matches L3 | hard |
+| L5 | palette #3b2a20 and #c49a6c as dominant tones | derived | sampled frames | hard |
+| L6 | shot types, camera, light, pacing feel | pending | frames not yet read | omit until read |
+| L7 | model, prompt, seed of the reference | unknown | not in file metadata | omit |
+Palette covers about 60 percent of sampled color weight. The rest is unknown and is not used as a constraint.
+
+Stage 5. Spec
+I would write work/ref/spec.md with:
+Goal: recreate
+Output: video, 9:16, 1080x1920, 12.1 s, 4 shots
+Hard constraints (observed/derived): 9:16; about 12 s total; 4 shots of about 3 s each; warm dark-brown and caramel palette (#3b2a20, #c49a6c) as the base grade
+Soft hints (inferred): none yet; they wait for the frame reading in Stage 3
+Exclusions (originality gate): any person or face in the reference; any brand wordmark, logo, or tagline text; any verbatim on-screen or voice text
+Open questions: total budget cap (the request says "within budget" but gives no number); the coffee product assets (photo or description, and whether the user owns the rights to any image); whether there is a voice-over
+Shot list: rows left as pending until Stage 3 is done.
+
+Stage 6. Plan
+Routing: a video ad goes to higgsfield-generate. I enter only that one downstream skill.
+$ higgsfield model list
+$ higgsfield model get <model-chosen-from-list> --json
+Model is picked from the live catalog by capability: 9:16, about 3 s clips, image input for the coffee product if available. No model is named here, because the list output is not in the observations and the name must not be guessed.
+Cost gate: four jobs is a multi-job plan, so the total needs explicit approval before anything is created.
+$ higgsfield generate cost <model-chosen-from-list> --aspect-ratio 9:16 --duration 3 --prompt-file work/ref/shot1.txt
+$ higgsfield generate cost <model-chosen-from-list> --aspect-ratio 9:16 --duration 3 --prompt-file work/ref/shot2.txt
+$ higgsfield generate cost <model-chosen-from-list> --aspect-ratio 9:16 --duration 3 --prompt-file work/ref/shot3.txt
+$ higgsfield generate cost <model-chosen-from-list> --aspect-ratio 9:16 --duration 3 --prompt-file work/ref/shot4.txt
+The per-shot prompts are not written yet, because the shot list waits on Stage 3. The cost numbers are not in the observations.
+No create command is run. Nothing is spent.
+
+Message to the user (plan for approval, not yet generated):
+- Reference read: 9:16, 1080x1920, 12.1 s, four cuts of about 3 s each, warm dark-brown and caramel palette. Measured, not guessed.
+- Not yet known: shot types, camera moves, lighting, and pacing feel. I need to look at the frames before I can write the shot list.
+- The reference generator (model, prompt, seed) is unknown and is not used.
+- I will not reuse any person, logo, brand name, tagline, or spoken text from the reference.
+Questions, asked together because they all block the plan:
+1. What is the budget cap in dollars or credits?
+2. Do you have photos of the coffee product, and do you own the rights to them?
+3. Should the ad have a voice-over, or should it be music and on-screen text only?
+Once you answer, I will finish the frame reading, write the shot list and prompts, run the cost call for the total, and show you that total for approval before any generation starts.
+
+Stage 7. Generate
+Not started. It waits for the approved plan and the cost total.
+
+After generation (for reference only, not run)
+If the plan is approved and jobs run, the closed loop would be used for the four-shot plan:
+$ python3 -I scripts/refine_loop.py --ref /home/claude/hf-skills/work/ref/teardown.json --plan /home/claude/hf-skills/work/plan.json --out /home/claude/hf-skills/work/loop --dry-run
+The dry run shows the commands and the call budget. I would show that budget to the user before the live run. After the live run I would open judge.md and inspect the listed frames myself for look, motion, text, and exclusions. Hard constraints checked by the comparison are aspect ratio, duration within 15 percent, shot count within one, and palette distance at most 20:
+$ python3 -I scripts/teardown_media.py --compare /home/claude/hf-skills/work/ref/teardown.json /home/claude/hf-skills/work/cand/teardown.json
+
+End of transcript. Stopped at the approval gate. Waiting on the user's answers to the three questions above.

@@ -1,0 +1,59 @@
+Intake
+Goal: restyle (a moody night version). Type: video, 10 s.
+The user says they shot the clip themselves. That is a rights statement, and the goal is restyle, so the clip may be passed as --video. The original is never edited.
+
+Bootstrap
+$ command -v higgsfield
+$ higgsfield account status
+If the status shows Session expired or Not authenticated, I ask the user to run higgsfield auth login and wait.
+$ command -v ffprobe ffmpeg python3
+
+Capture
+$ mkdir -p work/mine && cp work/mine.mp4 work/mine/mine.mp4
+
+Measure
+$ python3 -I scripts/teardown_media.py work/mine/mine.mp4 --out work/mine/ref
+
+Helper output:
+- 1920x1080, observed. 16:9, derived.
+- 10.0 s, observed.
+- 3 shots, derived.
+- Palette #dcdcd2 (0.5) and #8a8f80 (0.3), derived. A light, neutral grey-green.
+
+Read
+Camera and lighting per shot are not in this output. They stay unknown until I judge motion across at least two frames per shot.
+
+Grade (written to work/mine/ref/ledger.md)
+| id | claim | grade | evidence | used as |
+| L1 | 1920x1080 | observed | ffprobe | hard |
+| L2 | 16:9 | derived | 1920/1080 | hard |
+| L3 | 10.0 s | observed | ffprobe | hard |
+| L4 | 3 shots | derived | scene cuts > 0.30 | hard |
+| L5 | source palette #dcdcd2, #8a8f80 | derived | sampled frames | omit for output (the restyle changes it); kept only as the source reference |
+| L6 | camera and lighting per shot | unknown | not yet judged | omit |
+
+The moody night look is the user's direction, not a claim about the reference, so it is the goal and not a graded entry.
+
+Spec (written to work/mine/ref/spec.md)
+Goal: restyle
+Output: video, 16:9, 1920x1080, 10 s, 3 shots
+Hard constraints: aspect 16:9; duration about 10 s; 3 shots (kept from the source)
+Soft hints: none graded yet
+Exclusions: none. The footage is the user's own.
+Open questions: the night grade (cool moonlight or warm practicals); whether to keep the original camera moves
+
+QA after generation
+Palette is not checked for this restyle, because changing it is the point. QA checks aspect ratio, duration and shot count only, using the teardown compare step.
+
+Plan
+One prompt per shot, three shots, no --count. The model comes from the live catalog and must accept video input for restyle.
+$ higgsfield model list
+$ higgsfield model get <candidate> --json
+I choose a candidate with 16:9 output, a 10 s duration, and video input.
+$ higgsfield generate cost <model> --video work/mine/mine.mp4 ...   (same flags as the create command; the three-job total is shown before approval)
+
+Questions for you
+1. Do you approve the three-job plan and its total cost?
+2. Which night look do you want: cool moonlight, or warm practicals?
+
+Waiting for your answers. Nothing is generated yet.

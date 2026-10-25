@@ -1,0 +1,39 @@
+$ higgsfield account status
+Account check: a signed-in session is assumed, and no auth prompt is needed unless this shows "Session expired" or "Not authenticated".
+
+$ mkdir -p work/ad4/ref && cp work/ad4.mp4 work/ad4/ref/copy.mp4
+Working copy made; the original work/ad4.mp4 is not edited.
+
+$ python3 -I scripts/teardown_media.py work/ad4/ref/copy.mp4 --out work/ad4/ref
+Measured (observations): 1080x1920 observed; 9:16 derived; 12.1 s observed; 4 shots derived (3.0, 3.1, 2.9, 3.1 s); palette #3b2a20 (0.35) and #c49a6c (0.25) derived.
+
+Next I would open work/ad4/ref/contact_sheet.jpg and the first, last, and one mid-shot frame. These are not in the observations, so shot types, camera moves, lighting, grade, typography, and audio stay PENDING until I have looked at them. I will not fill them with guesses.
+
+Ledger (work/ad4/ledger.md), measured facts only so far:
+L1 | 9:16, 1080x1920 | observed | ffprobe | hard
+L2 | 4 shots, avg ~3.0 s | derived | scene cuts | hard
+L3 | ~12.1 s total | observed | ffprobe | hard
+L4 | palette #3b2a20 (0.35), #c49a6c (0.25) | derived | sampled frames | hard
+Demotion: none needed yet. No inference is graded until the frames are read.
+
+Spec (work/ad4/spec.md), draft:
+Goal: recreate
+Output: video, 9:16, ~12.1 s, 4 shots
+Hard constraints: 9:16; 12.1 s; 4 shots at ~3 s each; palette #3b2a20 / #c49a6c as color words
+Soft hints: none yet (pending frame read)
+Exclusions: none recorded yet (pending frame read for logos, faces, verbatim text)
+Open questions: shot content and camera per shot; audio structure; whether the coffee product needs a specific pack shot
+Product: the user's own coffee product (allowed; not part of the reference)
+
+Plan (cost gate, nothing generated yet):
+$ higgsfield model list
+$ higgsfield model get <candidate> --json
+Choose a model from the live catalog that supports 9:16, a ~3 s clip, and image input for the product. I do not hardcode a model from the look of the reference.
+$ higgsfield generate cost <model> --aspect-ratio 9:16 --duration 3 ...   (run for each of the 4 shot prompts, then total)
+
+Stopping point. The plan has 4 jobs, so the total must be approved before any paid generation.
+
+Question for you:
+1. What is the budget ceiling? "Within budget" needs a number to check the cost total against.
+2. Send the coffee product photo(s) so I can use them as the product reference for the shots.
+3. Approve the cost total once I show it (I will not generate before that).

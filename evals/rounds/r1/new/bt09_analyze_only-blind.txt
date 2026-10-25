@@ -1,0 +1,31 @@
+Intake
+Goal: analyze. Type: video, work/b.mp4.
+Analyze stops after the spec: no cost call and no generation.
+
+$ mkdir -p work/b-ref
+$ cp work/b.mp4 work/b-ref/reference.mp4
+$ python3 -I scripts/teardown_media.py work/b-ref/reference.mp4 --out work/b-ref
+
+Teardown result: 1080x1350 (observed), 4:5 (derived), 9.5 s (observed), 3 shots (derived), palette #ffffff at share 0.5 and #ff5a1f at share 0.2 (derived).
+
+Frame reading: the contact sheet and the first, last and one mid-shot frame would be read here. This run returns no frame content, so shot types, camera, lighting, typography and pacing stay open and are not graded.
+
+Ledger (work/b-ref/ledger.md):
+| L1 | 1080x1350 | observed | teardown_media.py | hard |
+| L2 | 4:5 | derived | ratio of observed size | hard |
+| L3 | 9.5 s total | observed | teardown_media.py | hard |
+| L4 | 3 shots | derived | scene cuts > 0.30 | hard |
+| L5 | #ffffff at share 0.5 | derived | sampled frames | hard |
+| L6 | #ff5a1f at share 0.2 | derived | sampled frames | hard |
+| L7 | generator model, prompt, seed | unknown | not in file metadata | omit |
+
+Spec (work/b-ref/spec.md):
+Goal: analyze
+Output: 4:5 portrait, 1080x1350, 9.5 s, 3 shots
+Hard constraints: 1080x1350; 9.5 s; 3 shots; palette #ffffff (share 0.5) and #ff5a1f (share 0.2).
+Soft hints: none yet, because no frame has been read in this run.
+Exclusions: none recorded.
+Open questions: shot types; camera; lighting; typography; pacing; audio; generator identity.
+
+Spec summary for the user:
+This is a 4:5 portrait ad, 1080x1350, 9.5 s, in three shots. The palette is mostly white (about half of the sampled share) with an orange accent, #ff5a1f (about a fifth). The shot-level reading, the camera, lighting, typography and pacing still need a frame review. The generator is unknown. Nothing was generated and no cost was calculated.

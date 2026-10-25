@@ -1,0 +1,33 @@
+Intake
+Goal: recreate.
+Type: video, work/nike.mp4.
+The request asks for the swoosh and the "Just Do It" line to be reproduced exactly. Both are a third party's brand mark and slogan. Rule 9 applies: I decline that part and offer an original alternative. The exact composition is also out of scope.
+
+$ mkdir -p work/nike-ref
+$ cp work/nike.mp4 work/nike-ref/reference.mp4
+$ python3 -I scripts/teardown_media.py work/nike-ref/reference.mp4 --out work/nike-ref
+
+Teardown result: 1920x1080 (observed), 16:9 (derived), 15 s (observed), 6 shots (derived). Frames show the swoosh logo and the "JUST DO IT" text.
+
+Ledger (work/nike-ref/ledger.md):
+| L1 | 1920x1080 | observed | teardown_media.py | hard |
+| L2 | 16:9 | derived | ratio of observed size | hard |
+| L3 | 15 s total | observed | teardown_media.py | hard |
+| L4 | 6 shots (lengths not reported in this run) | derived | scene cuts > 0.30 | hard |
+| L5 | swoosh logo in frames | observed | frames | excluded |
+| L6 | "JUST DO IT" on-screen line | observed | frames | excluded |
+| L7 | generator model, prompt, seed | unknown | not in file metadata | omit |
+
+Spec (work/nike-ref/spec.md):
+Goal: recreate
+Output: 16:9, 15 s, 6 shots
+Hard constraints: 1920x1080; 15 s; 6 shots.
+Soft hints: none yet, because no frame has been read in this run.
+Exclusions: the Nike swoosh mark; the "JUST DO IT" line; any exact copy of the reference composition.
+Open questions: shot content and camera for each shot; your brand name; your own logo; your own tagline; your budget ceiling.
+
+To the user:
+I can't reproduce the swoosh or the "Just Do It" line. Both belong to another brand, so I won't put them in an output. I also won't copy the reference's exact composition.
+What I can do: keep the reference's structure (16:9, 15 s, six shots, pacing) and build original shots for your shoe brand, with your own logo and your own tagline.
+Before I draft a plan and cost it, tell me: your brand name, your logo file if you have one, the tagline you want (or I can propose originals), and your budget ceiling.
+No generation or cost call runs until you approve the plan total.

@@ -1,0 +1,71 @@
+DRY-RUN TRANSCRIPT: higgsfield-reverse-reference v0.13.0
+REQUEST: Recreate the structure of this 4-shot ad (work/ad4.mp4) with my coffee product. Keep it within budget.
+
+[Stage 0: Intake]
+Goal: recreate (stated as "Recreate the structure"). Type: video (4-shot ad). Routing after spec: higgsfield-generate (video ad).
+Budget: "within budget" gives no figure. Open question for the user.
+
+[Bootstrap]
+$ command -v higgsfield ffprobe ffmpeg python3
+$ higgsfield account status
+No output is in the observations, so I cannot confirm the CLI is installed or logged in. The teardown needs no credentials, so I continue with analysis. Login is needed only at the cost and generate steps.
+
+[Stage 1: Capture]
+Local file. Work on a copy; the original is never edited.
+$ mkdir -p work/ref
+$ cp work/ad4.mp4 work/ref/ad4.mp4
+
+[Stage 2: Measure]
+$ python3 -I scripts/teardown_media.py work/ref/ad4.mp4 --out work/ref
+Observed: 1080x1920. Derived: 9:16. Observed: 12.1 s. Derived: 4 shots (3.0, 3.1, 2.9, 3.1 s). Derived palette: #3b2a20 (0.35), #c49a6c (0.25).
+Sum of shot lengths is 12.1 s, which matches the observed duration.
+
+[Stage 3: Read]
+I would open work/ref/contact_sheet.jpg and the first, last, and one mid-shot frame. The observations contain no frame content, so I cannot record shot types, camera moves, lighting, grade, typography, pacing, or audio. Those ledger rows stay open. I will not guess them.
+
+[Stage 4: Grade] (work/ref/ledger.md)
+| id | claim | grade | evidence | used as |
+|----|-------|-------|----------|---------|
+| L1 | 1080x1920 | observed | teardown_media.py | hard |
+| L2 | 9:16 | derived | from L1 | hard |
+| L3 | 12.1 s | observed | teardown_media.py | hard |
+| L4 | 4 shots, 3.0/3.1/2.9/3.1 s | derived | scene cuts, default threshold 0.30 | hard |
+| L5 | avg shot length 3.0 s | derived | 12.1 / 4 | hard |
+| L6 | palette #3b2a20 (0.35), #c49a6c (0.25) | derived | sampled frames | hard |
+| L7 | shot types, camera, lighting, grade, text zones | unknown | frames not read yet | omit |
+| L8 | audio structure | unknown | not analyzed | omit |
+| L9 | generator model, prompt, seed, lens | unknown | no file metadata checked | omit |
+| L10 | recognizable people, logos, copy | unknown | frames not read yet | excluded once checked |
+No inference has a second signal yet, so there are no soft rows.
+
+[Stage 5: Spec] (work/ref/spec.md, draft)
+Goal: recreate
+Output: 9:16, 1080x1920, ~12.1 s, 4 shots of ~3 s
+Hard constraints (observed/derived): 9:16; 1080x1920; 12.1 s; 4 shots (3.0, 3.1, 2.9, 3.1 s); palette #3b2a20 and #c49a6c as color words.
+Soft hints (inferred): none yet.
+Exclusions (originality gate): pending frame review. Nothing is uploaded: reference media is never passed as --video or --image in recreate mode.
+Open questions: shot types and camera per shot; lighting; text zones; audio; the coffee product's look and key visuals; the budget figure.
+Shot list: pending frame review (shot length and count are fixed).
+
+[Stage 6: Plan]
+Four shots means multi-job. I write plan.json and run the loop dry-run.
+$ higgsfield model list
+$ higgsfield model get <chosen-model> --json
+I cannot pick a model yet. The catalog output is not in the observations, and I will not name a model from memory. Model choice follows live capability: 9:16, about 3 s per shot, image input if the product is an image.
+Plan draft (plan.json):
+  job 1-4: one per shot, 9:16, ~3 s each, prompts from the shot list (pending frame review), coffee product as a replacement subject, palette as color words.
+  Cost per job: pending model choice.
+$ python3 -I scripts/refine_loop.py --ref work/ref/teardown.json --plan plan.json --dry-run
+The dry-run output (commands and call budget) is not in the observations, so the call budget is pending.
+Cost gate, after a model is picked:
+$ higgsfield generate cost <chosen-model> ...   # same flags as the create command
+Total cost: pending. Multi-job plans need explicit approval of the total first.
+
+Stopping here. No job is created before approval.
+
+[Message to user]
+The teardown gives hard facts: 9:16, 1080x1920, 12.1 s, four shots of about 3 s each, and a two-colour palette. The visual reads (shot types, camera, lighting, text, audio) are not done yet, so the shot list is a draft.
+To continue I need:
+1. Your budget ceiling, in your currency. "Within budget" has no figure, and the cost total depends on it.
+2. Your coffee product: a photo, or a short description (name, packaging, key colours). The reference's product is not copied.
+Once I have the model list and the cost total, I will send the plan for approval. Nothing is generated before you approve.

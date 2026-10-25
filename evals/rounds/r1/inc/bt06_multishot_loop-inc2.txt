@@ -1,0 +1,71 @@
+DRY-RUN TRANSCRIPT: higgsfield-reverse-reference
+REQUEST: Recreate the structure of this 4-shot ad (work/ad4.mp4) with my coffee product. Keep it within budget.
+
+--- Stage 0: Intake ---
+Goal: recreate (stated in the request). Type: video ad, 4 shots. Goal is clear, so no intake question.
+
+--- Bootstrap ---
+$ command -v higgsfield
+$ higgsfield account status
+If higgsfield is missing: install with curl -fsSL https://raw.githubusercontent.com/higgsfield-ai/cli/main/install.sh | sh, then re-check.
+If the status shows "Session expired" or "Not authenticated": ask the user to run `higgsfield auth login` and wait.
+Local media tools: the teardown run below needs ffprobe, ffmpeg and python3. Its output is in OBSERVATIONS, so they are present.
+
+--- Stage 1: Capture ---
+The original work/ad4.mp4 stays untouched. Work on a copy.
+$ mkdir -p work/ref
+$ cp work/ad4.mp4 work/ref/ad4.mp4
+
+--- Stage 2: Measure ---
+$ python3 -I scripts/teardown_media.py work/ref/ad4.mp4 --out work/ref
+Result (from OBSERVATIONS):
+  1080x1920 (observed)
+  9:16 (derived)
+  12.1 s (observed)
+  4 shots, lengths 3.0, 3.1, 2.9, 3.1 s (derived)
+  palette #3b2a20 weight 0.35, #c49a6c weight 0.25 (derived)
+Output written: work/ref/teardown.json, frame_XX.jpg, contact_sheet.jpg
+
+--- Stage 3: Read ---
+I would open work/ref/contact_sheet.jpg, then the first, a middle and the last frame, and record shot type, camera, lighting, grade, typography, pacing and audio structure.
+This dry run gives no frame content. Those visual entries stay unrecorded. I will not fill them from guesses.
+
+--- Stage 4: Grade (ledger.md, kept on disk) ---
+| id | claim | grade | evidence | used as |
+|----|-------|-------|----------|---------|
+| L1 | 1080x1920 | observed | teardown_media.py | hard |
+| L2 | 9:16 | derived | from L1 | hard |
+| L3 | 12.1 s | observed | teardown_media.py | hard |
+| L4 | 4 shots | derived | scene cuts at default 0.30 | hard |
+| L5 | shot lengths 3.0, 3.1, 2.9, 3.1 s | derived | scene cuts | hard |
+| L6 | palette #3b2a20 and #c49a6c | derived | sampled frames | hard |
+| L7 | shot types, camera moves, lighting, grade look, text zones, hook in first 2 s | unknown | frames not yet read | omit |
+| L8 | audio structure | unknown | not analyzed | omit |
+| L9 | generator identity (model, prompt, seed) | unknown | not recoverable from the file | omit |
+| L10 | recognizable people, logos, brand names, verbatim on-screen or voiceover text | pending | must be checked on frames | excluded once found |
+
+--- Stage 5: Spec (provisional, spec.md on disk) ---
+Goal: recreate
+Output: video, 9:16, 1080x1920, about 12.1 s, 4 shots
+Hard constraints: 9:16 at 1080x1920; about 12.1 s; 4 shots of about 3 s each (3.0, 3.1, 2.9, 3.1); palette #3b2a20 and #c49a6c as color words
+Soft hints: none yet
+Exclusions: pending the frame read (L10)
+Open questions: shot content and camera for each shot; lighting; typography and text zones; audio structure; whether the coffee product has usable photos or footage; budget cap; model choice
+Shot list (only length is known): 1 | 3.0 s | ? | ? | ? | ? | ? ; 2 | 3.1 s | ... ; 3 | 2.9 s | ... ; 4 | 3.1 s | ...
+The spec is not final until the frame read is done.
+
+--- Stage 6: Plan (not created, waiting for approval) ---
+$ higgsfield model list
+$ higgsfield model get <model-from-live-catalog> --json
+I will choose the model from the live catalog by duration (about 12 s), aspect ratio 9:16, audio if needed, and image input for the product. I will not name a model before the catalog output is in hand.
+$ higgsfield generate cost <model> ...
+Cost is shown for the whole plan. Nothing is created before approval. The reference video is not uploaded. It is analyzed locally only.
+If the coffee product photo is supplied, it is used as product input, not as the reference.
+
+Reply needed before I continue:
+1. Your budget cap (amount in your currency).
+2. Whether you have a coffee product photo or footage to use.
+After I read the frames and price the plan, I will show the shot list and total cost and wait for your go-ahead.
+
+--- Not done in this dry run ---
+No jobs created. No generation. No cost call run. No original file edited.
