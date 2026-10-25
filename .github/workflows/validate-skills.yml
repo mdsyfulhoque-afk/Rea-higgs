@@ -56,6 +56,11 @@ jobs:
       - name: Offline harness evaluation (zero-cost, deterministic)
         run: python3 scripts/offline_eval.py
 
+      - name: Self-test eval checks
+        run: |
+          python3 evals/check_selftest.py evals/checks.json
+          python3 evals/check_selftest.py evals/heldout.json --require-examples
+
       - name: Self-test eval runner on fixtures
         run: python3 evals/run_evals.py evals/fixtures --expect-fail bad
 
