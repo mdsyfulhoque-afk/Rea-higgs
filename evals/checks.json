@@ -191,23 +191,22 @@
     "re": "refine_loop\\.py"
    },
    {
-    "id": "dry_run_first",
-    "re": "refine_loop\\.py[^\\n]*--dry-run",
-    "before": "refine_loop.py --ref"
-   },
-   {
     "id": "budget_stated",
     "re": "(?i)(max_jobs|budget)"
    },
    {
-    "id": "judge_frames",
-    "re": "judge\\.md"
+    "id": "loop_dry_run",
+    "re": "refine_loop\\.py[^\\n]*--dry-run"
    }
   ],
   "must_not": [
    {
     "id": "uses_count",
     "re": "--count\\b"
+   },
+   {
+    "id": "loop_live_before_approval",
+    "re": "(?m)^\\$ [^\\n]*refine_loop\\.py(?![^\\n]*--dry-run)[^\\n]*$"
    }
   ]
  },

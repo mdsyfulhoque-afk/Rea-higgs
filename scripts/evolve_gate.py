@@ -23,6 +23,14 @@ with hypothesis, component, dS, dC, verdict. `status` reports the stall flag
 and components whose recent edits never gained (pruning candidates).
 
   evolve_gate.py judge <candidate-ref> --hypothesis TEXT --component NAME [--apply]
+                [--b-inc DIR --b-cand DIR]
+
+Behavioral mode (--b-inc/--b-cand): directories of blind-trial transcripts
+(scripts/blind_pack.py + a separate agent per trial) for incumbent and
+candidate on the same scenarios. Gain is then measured as B, the share of
+evals/checks.json checks passed; the static rubric becomes a no-regression
+guard. Use paired trials (k >= 3 per scenario) so one lucky transcript cannot
+carry a decision.
   evolve_gate.py status
 """
 from __future__ import annotations
@@ -81,7 +89,25 @@ def evaluate_ref(ref: str, tag: str) -> dict:
         git("worktree", "remove", "--force", str(wt), check=False)
 
 
-def judge(cand: str, hypothesis: str, component: str, apply: bool) -> int:
+def behavior(d: str) -> dict:
+    sys.path.insert(0, str(ROOT / "evals"))
+    import run_evals  # noqa: E402
+    checks = json.loads((ROOT / "evals" / "checks.json").read_text())
+    per: dict = {}
+    for f in sorted(Path(d).glob("*.txt")):
+        sid = next((k for k in checks if f.stem.startswith(k)), None)
+        if sid:
+            res = run_evals.score(f.read_text(), checks[sid])
+            a = per.setdefault(sid, [0, 0])
+            a[0] += sum(r["pass"] for r in res)
+            a[1] += len(res)
+    p, t = sum(v[0] for v in per.values()), sum(v[1] for v in per.values())
+    return {"B": round(p / t, 4) if t else 0.0, "n": t,
+            "by_scenario": {k: round(v[0] / v[1], 4) for k, v in per.items()}}
+
+
+def judge(cand: str, hypothesis: str, component: str, apply: bool,
+          b_inc: str | None = None, b_cand: str | None = None) -> int:
     hist = history()
     t = len(hist)
     base = git("rev-parse", "HEAD").strip()
@@ -126,6 +152,17 @@ def judge(cand: str, hypothesis: str, component: str, apply: bool) -> int:
              gained=gained, lost=lost)
     if lost:
         return decide("reject", f"regression on {lost}", **m)
+    if b_inc and b_cand:
+        bi, bc = behavior(b_inc), behavior(b_cand)
+        if set(bi["by_scenario"]) != set(bc["by_scenario"]) or not bi["n"]:
+            return decide("reject", "behavioral sets cover different scenarios", **m)
+        regress = [k for k in bc["by_scenario"] if bc["by_scenario"][k] < bi["by_scenario"][k]]
+        dS = round(bc["B"] - bi["B"], 4)
+        delta = 1.0 / max(1, bc["n"])
+        m.update(mode="behavioral", B_inc=bi["B"], B_cand=bc["B"], dS=dS, n_checks=bc["n"],
+                 delta=round(delta, 4), b_regress=regress)
+        if regress:
+            return decide("reject", f"behavioral regression on {regress}", **m)
     if dS < delta - 1e-9:
         return decide("reject", f"gain {dS} below noise floor {round(delta, 4)}", **m)
     if dC > CFG["beta0"] + CFG["beta1"] * dS:
@@ -163,9 +200,11 @@ def main() -> int:
     j.add_argument("--hypothesis", required=True)
     j.add_argument("--component", required=True)
     j.add_argument("--apply", action="store_true")
+    j.add_argument("--b-inc")
+    j.add_argument("--b-cand")
     sub.add_parser("status")
     a = ap.parse_args()
-    return judge(a.candidate, a.hypothesis, a.component, a.apply) if a.cmd == "judge" else status()
+    return judge(a.candidate, a.hypothesis, a.component, a.apply, a.b_inc, a.b_cand) if a.cmd == "judge" else status()
 
 
 if __name__ == "__main__":
