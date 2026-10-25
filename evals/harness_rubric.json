@@ -1,0 +1,19 @@
+{
+ "_doc": "Static, deterministic checks on skill text. Measures whether a rule exists where the decision is made, not whether a model follows it. Each check: file (relative to repo), re (regex), optional section (heading text whose body is searched), optional before (regex that must match later in the same scope).",
+ "higgsfield-reverse-reference": [
+  {"id": "grades_defined", "file": "SKILL.md", "section": "Authority rules", "re": "observed.*derived.*inferred.*unknown"},
+  {"id": "unknown_not_filled", "file": "SKILL.md", "section": "Authority rules", "re": "(?i)unknown stays unknown|never fill"},
+  {"id": "originality_gate", "file": "SKILL.md", "section": "Authority rules", "re": "(?i)originality gate"},
+  {"id": "no_reference_upload", "file": "SKILL.md", "section": "Authority rules", "re": "(?i)never passed to `--image`"},
+  {"id": "cost_before_create", "file": "SKILL.md", "section": "Stage flow", "re": "(?i)cost", "before": "(?i)7\\. Generate"},
+  {"id": "stop_on_unclear_goal", "file": "SKILL.md", "section": "Stage flow", "re": "(?i)(stop|wait)[^\\n]{0,80}(goal|answer)|goal[^\\n]{0,120}(stop|wait)"},
+  {"id": "stop_for_approval", "file": "SKILL.md", "section": "Stage flow", "re": "(?i)(wait|stop)[^\\n]{0,60}approv|approv[^\\n]{0,60}(wait|stop|before)"},
+  {"id": "analyze_goal_no_generate", "file": "SKILL.md", "re": "(?i)`analyze`[^\\n]{0,160}(no generation|never generate|do not generate|stop after)"},
+  {"id": "loop_dry_run_first", "file": "SKILL.md", "section": "QA after generation", "re": "--dry-run"},
+  {"id": "visual_judge", "file": "SKILL.md", "section": "QA after generation", "re": "judge\\.md"},
+  {"id": "generator_identity_unknown", "file": "SKILL.md", "re": "(?i)(model|generator)[^\\n]{0,80}(stays|is|remains) `?unknown"},
+  {"id": "missing_tools_degrade", "file": "SKILL.md", "section": "Bootstrap", "re": "(?i)degrade"},
+  {"id": "ledger_template", "file": "references/evidence-ledger.md", "re": "\\| id \\| claim \\| grade \\|"},
+  {"id": "trademark_refusal", "file": "SKILL.md", "re": "(?i)(trademark|slogan)"}
+ ]
+}
