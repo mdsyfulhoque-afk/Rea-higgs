@@ -41,7 +41,7 @@ HISTORY = STATE / "history.jsonl"
 CFG = {"T": 12, "b_min": 1, "b_max": 4, "beta0": 0.02, "beta1": 1.0, "w": 3, "n_prune": 4}
 
 CRITIC = [
-    (r"^\+.*\b(t\d{2}_[a-z_]+|scenario-\d+)\b", "scenario id in added line"),
+    (r"^\+.*\b(b?t\d{2}_[a-z_]+|scenario-\d+)\b", "scenario id in added line"),
     (r"^\+.*(harness_rubric|offline_eval|evolve_gate|checks\.json)", "scorer reference in added line"),
     (r"^-.*(?i:originality gate)", "originality gate line removed"),
     (r"^-.*(?i:never passed to `--image`)", "reference-upload ban removed"),

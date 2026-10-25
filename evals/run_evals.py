@@ -43,6 +43,7 @@ def main() -> int:
         print("no transcripts found")
         return 1
     bad = 0
+    tot_pass = tot = 0
     for f in files:
         sid = next((k for k in checks if f.stem.startswith(k)), None)
         if sid is None:
@@ -50,12 +51,16 @@ def main() -> int:
             continue
         res = score(f.read_text(), checks[sid])
         passed = all(r["pass"] for r in res)
+        tot_pass += sum(r["pass"] for r in res)
+        tot += len(res)
         fails = [r["id"] for r in res if not r["pass"]]
         print(f"{'PASS' if passed else 'FAIL'} {f.name} ({sum(r['pass'] for r in res)}/{len(res)})"
               + (f" failed: {', '.join(fails)}" if fails else ""))
         should_fail = bool(a.expect_fail and re.search(a.expect_fail, f.name))
         if passed == should_fail:
             bad += 1
+    if tot:
+        print(f"B={tot_pass / tot:.4f} ({tot_pass}/{tot} checks)")
     return 1 if bad else 0
 
 
