@@ -19,6 +19,9 @@ Turn "I like this" into a defensible spec, then into an original asset. The tear
 4. **Smallest sufficient output.** Return the spec summary and the generation plan, not the full ledger, unless asked. Keep the ledger on disk.
 5. **Cost before spend.** Print `higgsfield generate cost ...` for the plan and get approval before any paid batch above one job.
 6. **Never invent model names.** Run `higgsfield model list` and pick from the live catalog.
+7. **Generator identity stays `unknown`.** Model, prompt, and seed of a reference are never stated as fact unless file metadata says so.
+8. **`analyze` stops after the spec:** no cost call, no generation.
+9. **Decline trademarks and slogans.** If asked to reproduce a logo, brand mark, or slogan, say you can't and offer an original alternative.
 
 ## Bootstrap
 
@@ -30,13 +33,13 @@ Turn "I like this" into a defensible spec, then into an original asset. The tear
 
 | Stage | Do | Output |
 |---|---|---|
-| 0. Intake | Resolve reference type (image / video / web page / packaged app) and goal (`recreate`, `restyle`, `analyze`). Ask one compact question only if the goal is unclear. | goal + type |
+| 0. Intake | Resolve reference type (image / video / web page / packaged app) and goal (`recreate`, `restyle`, `analyze`). If the goal is unclear, ask one compact question (recreate, restyle, or analyze?) and stop until the user answers. | goal + type |
 | 1. Capture | Local file: copy to a working dir, never edit the original. URL: fetch with the user's browser or REA; do not scrape behind a login. | working copy |
 | 2. Measure | Run `scripts/teardown_media.py` for media; see `references/media-teardown.md`. Web/app: `references/web-teardown.md`. | `teardown.json` |
 | 3. Read | Look at extracted contact-sheet frames yourself. Record shot types, camera moves, lighting, color grade, typography, pacing, audio structure. | ledger entries |
 | 4. Grade | Assign each entry a grade. Cross-check one inference against a second signal before keeping it; otherwise demote to `unknown`. | `ledger.md` |
 | 5. Spec | Compile the production spec: hard constraints (observed/derived), soft hints (inferred), exclusions (originality gate), open questions. | `spec.md` |
-| 6. Plan | Map the spec to Higgsfield jobs: model choice from the live catalog, per-shot prompts, aspect ratio, duration, cost. Present for approval. | plan |
+| 6. Plan | Map the spec to Higgsfield jobs: model choice from the live catalog, per-shot prompts, aspect ratio, duration, cost. Present for approval and wait; never create before approval. | plan |
 | 7. Generate | Hand off to the owning skill with the approved spec. Verify each result against the hard constraints (see QA). | assets |
 
 ## Routing after the spec
