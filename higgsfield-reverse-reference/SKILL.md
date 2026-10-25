@@ -39,7 +39,7 @@ Turn "I like this" into a defensible spec, then into an original asset. The tear
 | 3. Read | Look at extracted contact-sheet frames yourself. Record shot types, camera moves, lighting, color grade, typography, pacing, audio structure. | ledger entries |
 | 4. Grade | Assign each entry a grade. Cross-check one inference against a second signal before keeping it; otherwise demote to `unknown`. | `ledger.md` |
 | 5. Spec | Compile the production spec: hard constraints (observed/derived), soft hints (inferred), exclusions (originality gate), open questions. | `spec.md` |
-| 6. Plan | Map the spec to Higgsfield jobs: model choice from the live catalog, per-shot prompts, aspect ratio, duration, cost. Present for approval and wait; never create before approval. | plan |
+| 6. Plan | Map the spec to Higgsfield jobs: model choice from the live catalog, per-shot prompts, aspect ratio, duration, cost. Two or more jobs: write `plan.json` and include `python3 -I scripts/refine_loop.py --ref <ref>/teardown.json --plan plan.json --dry-run` output (commands and call budget) in the plan. Present for approval and wait; never create before approval. | plan |
 | 7. Generate | Hand off to the owning skill with the approved spec. Verify each result against the hard constraints (see QA). | assets |
 
 ## Routing after the spec
