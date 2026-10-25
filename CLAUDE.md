@@ -160,6 +160,17 @@ Adopted from the REA reverse-engineering project's engineering rules. Applies to
 - No speculative complexity: explain the concrete failure mode and cost before adding a guard for an unlikely edge case.
 - PR titles and commits use Conventional Commit subjects; breaking changes carry `!` or a `BREAKING CHANGE:` footer.
 
+## Zero-cost self-improvement loop
+
+Skill edits go through an RRSI-style gate (adapted from google-research/rrsi selection-side rules), with no API calls and no spend:
+
+1. Commit the proposed edit on a branch off the incumbent, with one testable hypothesis.
+2. `python3 scripts/evolve_gate.py judge <branch> --component <name> --hypothesis "<why>" [--apply]`
+3. The gate enforces, in order: annealed edit budget, diff critic (no scenario ids, no scorer references, no weakening of the originality, cost, upload, or unknown-grade rules), non-compensatory guards, no per-check regression, gain at least one rubric check, and context growth paid for by gain.
+4. Every decision is appended to `.evolve/history.jsonl` (committed). `evolve_gate.py status` shows the stall flag, falsified hypotheses, and components with no recent gain.
+
+The score is static (`evals/harness_rubric.json`): it shows a rule exists where the decision is made, not that a model obeys it. Behavioral evidence still comes from `evals/run_evals.py` on recorded transcripts.
+
 ## Skill chaining
 
 Skills communicate through return values, not implicit state.

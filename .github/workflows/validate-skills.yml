@@ -53,6 +53,9 @@ jobs:
           python3 higgsfield-reverse-reference/scripts/teardown_media.py /tmp/ref.mp4 --out /tmp/td2 >/dev/null
           python3 higgsfield-reverse-reference/scripts/teardown_media.py --compare /tmp/td/teardown.json /tmp/td2/teardown.json | grep -q '"all_pass": true'
 
+      - name: Offline harness evaluation (zero-cost, deterministic)
+        run: python3 scripts/offline_eval.py
+
       - name: Self-test eval runner on fixtures
         run: python3 evals/run_evals.py evals/fixtures --expect-fail bad
 
