@@ -171,7 +171,7 @@
    },
    {
     "id": "uses_owned_media",
-    "re": "--(video|image|start-image)\\s+\\S*mine\\.mp4"
+    "re": "(?i)--(video|image|start-image)\\s+\\S*mine\\.mp4|(source|own(ed)? (video|media)|mine\\.mp4)[^\\n]{0,40}(as|used as) (the )?(video |image )?input"
    },
    {
     "id": "cost_first",
