@@ -53,6 +53,8 @@ Do not batch-ask questions across skills. Finish the teardown, then enter exactl
 
 Compare each output to the hard constraints only: aspect ratio, duration, shot count, palette within tolerance (`scripts/teardown_media.py --compare`), text legibility, absence of excluded elements. Report pass/fail per constraint in one line each. A miss on a hard constraint triggers one targeted regeneration, not a full rerun. Soft hints are never graded as failures.
 
+For multi-shot plans, run the closed loop instead of retrying by hand: `python3 -I scripts/refine_loop.py --ref <ref>/teardown.json --plan plan.json --out <dir>` (`--dry-run` first to show commands and the call budget). It retries only failing jobs with per-constraint fix hints and stops at `max_jobs`. Then open `judge.md` and inspect the listed frames yourself for look, motion, text, and exclusions; the loop never judges those.
+
 ## Optional: REA for deeper evidence
 
 REA (reverse-engineering MCP) is useful only when the claim depends on a shipped page, bundle, or packaged app, for example "which font and easing does this site actually ship". If REA tools are already connected, use them for passive observation of a target the user supplied. If not, do not run setup; fall back to browser inspection (`references/web-teardown.md`). Never use REA to bypass protections, extract credentials, or analyze targets the user does not have the right to inspect.

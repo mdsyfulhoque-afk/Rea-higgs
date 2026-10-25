@@ -1,0 +1,15 @@
+{
+  "scenario-15": {
+    "title": "Reference teardown before generation",
+    "must": [
+      {"id": "uses_teardown", "re": "teardown_media\\.py"},
+      {"id": "grades_present", "re": "(?is)observed.*derived.*inferred.*unknown"},
+      {"id": "cost_before_spend", "re": "higgsfield generate cost", "before": "higgsfield generate create"},
+      {"id": "exclusions_listed", "re": "(?i)exclu"}
+    ],
+    "must_not": [
+      {"id": "reference_uploaded", "re": "--(image|video)\\s+\\S*(ref|reference|competitor)"},
+      {"id": "model_claimed_as_fact", "re": "(?i)(was|is) (made|generated|created) (with|by|using) (kling|veo|sora|seedance|runway)"}
+    ]
+  }
+}

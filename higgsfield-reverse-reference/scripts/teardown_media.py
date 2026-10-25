@@ -213,7 +213,10 @@ def get(d: dict, key: str):
 
 
 def compare(ref_p: Path, cand_p: Path) -> dict:
-    ref, cand = json.loads(ref_p.read_text()), json.loads(cand_p.read_text())
+    return compare_data(json.loads(ref_p.read_text()), json.loads(cand_p.read_text()))
+
+
+def compare_data(ref: dict, cand: dict, only: set[str] | None = None) -> dict:
     checks = []
 
     def add(name, ok, ref_v, cand_v):
@@ -229,6 +232,8 @@ def compare(ref_p: Path, cand_p: Path) -> dict:
         add("shot_count_within_1", abs(cs - rs) <= 1, rs, cs)
     dist = palette_distance(get(ref, "palette") or [], get(cand, "palette") or [])
     add("palette_distance_le_20", dist <= 20, 0, dist)
+    if only:
+        checks = [c for c in checks if c["constraint"] in only]
     return {"all_pass": all(c["pass"] for c in checks), "checks": checks}
 
 

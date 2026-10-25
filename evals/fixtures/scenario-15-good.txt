@@ -1,0 +1,7 @@
+$ python3 -I scripts/teardown_media.py work/ref.mp4 --out work/ref
+Ledger: L1 9:16 observed; L2 5 shots derived; L4 reads as handheld inferred; L5 source model unknown.
+Exclusions: competitor wordmark, presenter face, tagline.
+$ higgsfield generate cost <model> --prompt "..." --aspect-ratio 9:16
+Total: 40 credits. Approve?
+user: yes
+$ higgsfield generate create <model> --prompt "..." --aspect-ratio 9:16 --wait --json

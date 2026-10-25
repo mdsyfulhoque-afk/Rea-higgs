@@ -14,7 +14,7 @@ Evals exist to:
 
 ## How
 
-There is no automated runner yet. To run a round:
+Scoring is automated for scenarios listed in [`checks.json`](./checks.json): save each run's transcript as `<scenario-id>-<label>.txt` and run `python3 evals/run_evals.py <dir>`. Same transcript, same score. CI self-tests the runner on `fixtures/`. Scenarios without checks are still scored by hand:
 
 1. Read [`scenarios.md`](./scenarios.md) — 10 user requests + expected agent behavior.
 2. Run each scenario in a fresh agent session (Claude Code with skills installed).
