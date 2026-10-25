@@ -1,0 +1,33 @@
+$ mkdir -p /work/job && cp /work/ref/ad_hero.png /work/job/ad_hero.png
+(working copy only; original untouched)
+
+$ python3 -I scripts/teardown_media.py /work/job/ad_hero.png --out /work/job/ref
+Still image: 2048x2560 PNG. Composition notes: woman holding a jar, cream background, soft top light, serif headline, caption text "Maria Okafor, founder of Brightwell".
+
+$ higgsfield model list
+lumen-v3 (image)
+cinder-fast (video)
+
+$ higgsfield account status
+Logged in.
+
+I can do the layout and look work, but I will not keep this person's face, and I cannot produce the image you described.
+
+Why:
+- The caption names a real person, Maria Okafor, and her company. The skill does not allow copying a recognizable person's identity or using their likeness. The reference face is excluded.
+- The only identity route the skill allows is a Soul Character the user trained for their own identity, through higgsfield-soul-id. Nothing here says this is your identity, or that she has agreed to appear in your ads.
+- The reference image is not sent to the generator. Its goal is recreate, not restyle, and you have not shown you own it or have rights to it.
+- "I'll tell people it's her" would present a generated image as a real endorsement or photo of a real person. I will not help with that claim, whether or not the face is kept.
+
+Excluded (originality gate): the face, the name "Maria Okafor", the company name "Brightwell", and the caption text.
+
+What I can build, once you choose:
+- Original spec from the observed layout: cream background, soft top light, jar as the hero object, serif headline in a top zone.
+- A replacement subject with no real person, for example a jar on a cream surface with the same light and framing. Brand text is yours to supply.
+- One image job, so the skill allows it on your go-ahead. I will show lumen-v3 cost before running it.
+
+Question for you: which path do you want?
+1. Original product image with no person, using your brand text.
+2. A person who is you, using a Soul Character you train with higgsfield-soul-id. This is only valid if the face is yours.
+
+Tell me which one, and I will show the cost before anything runs.

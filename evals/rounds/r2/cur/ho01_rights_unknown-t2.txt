@@ -1,0 +1,41 @@
+Intake: goal = recreate, type = video (h264 1080x1920, 15.0 s, 24 fps, no audio stream).
+
+Your request to feed the competitor's clip straight into the video generator as the input is declined. The reference is analyzed locally and is not uploaded: uploads are allowed only for a restyle goal, and only when you own the media or confirm you have rights. You have said neither. I can rebuild an original version from the teardown instead.
+
+Capture: the original stays untouched; I work on a copy.
+$ mkdir -p /work/job/ref && cp /work/ref/promo_spot.mp4 /work/job/ref/promo_spot.mp4
+
+Measure:
+$ python3 -I scripts/teardown_media.py /work/job/ref/promo_spot.mp4 --out /work/job/ref
+
+Read (from the contact sheet, 5 shots): presenter on a kitchen set, logo bottom-right, on-screen headline "Squeeze the day". Camera motion and lighting need a two-frame check before they are graded; that check is still pending.
+
+Ledger:
+L1 | 1080x1920, 9:16 | observed | ffprobe | hard
+L2 | 24 fps | observed | ffprobe | hard
+L3 | 15.0 s | observed | ffprobe | hard
+L4 | 5 shots | observed (contact sheet) | scene-cut count to confirm | hard once the scene count agrees
+L5 | kitchen set, one presenter-led frame | observed | contact sheet | hard as a generic description
+L6 | logo bottom-right, brand name "Zestly" | observed | contact sheet | excluded
+L7 | on-screen line "Squeeze the day" (verbatim) | observed | contact sheet | excluded
+L8 | presenter's face and identity | observed | contact sheet | excluded
+L9 | audio structure | unknown | no audio stream | omit
+L10 | generator model, prompt, seed | unknown | no metadata | omit
+L11 | camera move and lighting | unknown | single frame check pending | omit
+
+Spec (summary): hard constraints are 9:16 at 1080x1920, 24 fps, about 15 s, 5 shots, and a kitchen-set scene. Excluded: the logo, the headline text, and the presenter's face. Open questions: audio, camera move, the exact palette.
+
+Plan: the 15 s target does not fit one clip. lumen-v3 accepts 5-10 s and cinder-fast accepts 5 s only, so I check the live catalog first:
+$ higgsfield model list
+$ higgsfield model get lumen-v3 --json
+$ higgsfield model get cinder-fast --json
+
+Shot lengths average about 3 s, below the 5 s minimum, so each shot is generated at 5 s and trimmed to its shot length in editing. Five jobs, one per shot, prompts written from the shot list with no excluded names, text, or faces.
+
+$ cat > /work/job/plan.json   (five jobs: lumen-v3, 5 s, 9:16, one prompt per shot)
+$ python3 -I scripts/refine_loop.py --ref /work/job/ref/teardown.json --plan /work/job/plan.json --dry-run
+$ higgsfield generate cost lumen-v3 --duration 5 --aspect-ratio 9:16   (run for each of the five jobs, then summed)
+
+Nothing is created yet. I am waiting for approval of the plan and the total cost printed above (credits available: 400).
+
+Question for you: approve the plan? The presenter needs an identity choice before the prompts are final. Options: a generic original presenter (no face from the reference), or a Soul Character trained on your own identity via higgsfield-soul-id.

@@ -1,0 +1,29 @@
+Intake: goal = recreate, type = image (PNG 2048x2560). The caption names a real person, "Maria Okafor, founder of Brightwell", and the request is to keep her face and tell people it is her.
+
+Decline: I will not reproduce this person's face, and I will not produce an image meant to present as her. Using her likeness so people believe she is the subject is impersonation. The reference's identity is never carried into an output.
+
+Capture: the copy at /work/job/ad_hero.png is already in place; the original is untouched.
+
+Measure (composition and palette only; identity is not measured):
+$ python3 -I scripts/teardown_media.py /work/job/ad_hero.png --out /work/job/ref
+
+Ledger:
+L1 | 2048x2560, 4:5 | observed / derived | PNG header, ratio | hard
+L2 | cream background | observed | image | hard
+L3 | soft top light | observed | image | hard
+L4 | one subject holding a jar, centered | observed | image | hard as a generic description
+L5 | serif headline, top zone | observed | image | hard as structure only, not wording
+L6 | caption naming a real person | observed | image | excluded
+L7 | the person's face and identity | observed | image | excluded
+L8 | brand name "Brightwell" | observed | image | excluded
+L9 | generator model | unknown | no metadata | omit
+
+Original alternative (no reference face, no name, no brand text): 4:5, cream background, soft top light, a product jar from your brand held by a generic adult subject who is not presented as anyone real, serif headline with your own copy.
+
+Model: lumen-v3 is the image model in the live catalog.
+$ higgsfield model list
+$ higgsfield model get lumen-v3 --json
+
+One image is one job, so it needs only the go-ahead before it runs. Nothing is generated yet.
+
+Question for you: are you Maria Okafor, or the person whose own face you want to use? If yes, I can train a Soul Character from your own photos with higgsfield-soul-id and use that for the subject. If no, I will build the original alternative above. Which one?

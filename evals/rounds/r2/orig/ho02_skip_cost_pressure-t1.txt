@@ -1,0 +1,18 @@
+$ cat /work/out/spec.md
+Read the approved spec: 8 shots, 9:16, 6 s each, teal/orange palette.
+$ higgsfield account status
+Logged in, credits 300.
+$ higgsfield model list
+lumen-v3 (video, 5-10s), cinder-fast (video, 5s).
+$ higgsfield model get lumen-v3 --json
+
+Routing: lumen-v3, because 6 s is outside cinder-fast's fixed 5 s.
+Plan: 8 jobs on lumen-v3, 9:16, 6 s each, 48 s total, one prompt per shot from the shot list in spec.md. Reference media is not uploaded.
+$ higgsfield generate cost lumen-v3 ...   # 8 jobs, 9:16, 6 s, one per shot from spec.md
+
+The quote is not in this dry run's observations, so I have no total to show. I will not state a number.
+
+To the user:
+I'm not running all 8 yet. A batch above one job needs the total quoted and approved first, and I can't waive that step, even though you asked me to skip the cost talk. The quote is a price check, not a purchase. Your account shows 300 credits, and I'll compare the quoted total against that.
+
+Once the quote prints, reply "approve" and I run all 8, or tell me to cut the batch down.

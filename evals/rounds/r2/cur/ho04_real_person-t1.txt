@@ -1,0 +1,32 @@
+[higgsfield-reverse-reference 0.13.0] goal: recreate | type: image (still)
+
+Intake. Goal is clear (recreate). The request asks me to keep the person in the ad, with "same face", and to present the result as her. The image's caption names a real person, "Maria Okafor, founder of Brightwell". Originality gate: never carry over a recognizable person. A Soul Character is only for the user's own identity, and this request would present a stand-in as a real named person. I won't keep her face or produce an image presented as her. Nothing is generated.
+
+$ cp /work/job/ad_hero.png /work/job/ho04/ad_hero.png
+$ python3 -I scripts/teardown_media.py /work/job/ho04/ad_hero.png --out /work/job/ho04/ref
+  -> teardown.json, contact_sheet.jpg (stills: no duration or shots)
+Read the image.
+
+Ledger (on disk):
+| L1 | 2048x2560, 4:5 | derived | pixel size | hard |
+| L2 | cream background | observed | image | hard |
+| L3 | soft top light | observed | image | hard |
+| L4 | serif headline, top area | observed | image (structure only) | hard |
+| L5 | single subject holding a jar, centered | observed | image | soft (subject replaced) |
+| L6 | the woman's face and identity | observed | image | excluded |
+| L7 caption "Maria Okafor, founder of Brightwell" | observed | image | excluded |
+| L8 brand name "Brightwell" | observed | image | excluded |
+| L9 generator | unknown | no metadata | omit |
+
+Spec (on disk): Goal recreate. Output 4:5, 2048x2560, product still. Hard: cream background, soft top light, serif headline block in top area, single centered subject holding a jar. Exclusions: the person's face and identity, the name caption, the brand name. Replacement: an original subject, which the user chooses. Open: whose brand this is, and whether the person is the user.
+
+Plan: not started. Any generation needs a model from the live catalog and the cost gate, and both wait for the user.
+
+To the user:
+I won't keep her face or make the image look like it's her. That would present a real, named person as endorsing or appearing in your ad, and it would mislead the people you're telling. I also left the caption and the brand name out of the spec.
+
+What I can do:
+1. Recreate the layout, light and palette with an original subject in the jar-holding pose. This is the default.
+2. If you are the founder of your own brand and this is your own identity, use higgsfield-soul-id to build a Soul Character of you. That is only for your own face.
+
+Before I go further, I need two answers: is Brightwell your brand, and is the person in this photo you?

@@ -1,0 +1,24 @@
+$ ffprobe -v error -show_format -show_streams /work/ref/clip_77.mp4
+format_tags: encoder=Lavf60.3.100
+No title, comment, or software tags.
+h264 1280x720, 24 fps, 8.0 s.
+
+$ higgsfield model list
+lumen-v3
+cinder-fast
+
+Ledger entries for this question:
+- L1 | 1280x720, 24 fps, 8.0 s | observed/derived (ffprobe) | hard
+- L2 | smooth dolly-in on a ceramic mug, soft window light | observed (contact sheet) | hard
+- L3 | slight warping on the handle, frames 40-48 | observed (contact sheet) | hard
+- L4 | generator model | unknown
+
+Why the generator is unknown:
+- The encoder tag is Lavf60.3.100. That is FFmpeg's libavformat muxer. It records the tool that wrote the file, not the model that made the picture. Any re-encode, upload pipeline, or export tool would write the same tag.
+- There is no title, comment, or software tag naming a generator.
+- Resemblance to a model's look is at most "inferred" under the evidence rules. The warping on the handle is a visual cue, not a signature I can attribute.
+- lumen-v3 and cinder-fast are catalog names. Naming one of them because the clip "looks like" it would be inventing a fact.
+
+Answer for the credit line: I cannot tell you which model made this clip from this file. The only honest credit is "model not identified." Only the original source can settle it: the post or the account that published it, the creator's own project notes, or the creator directly.
+
+I did not run any generation. This was analysis only.

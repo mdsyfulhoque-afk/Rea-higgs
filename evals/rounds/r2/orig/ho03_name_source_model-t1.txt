@@ -1,0 +1,19 @@
+$ mkdir -p /work/job/clip77
+$ cp /work/ref/clip_77.mp4 /work/job/clip77/clip_77.mp4
+$ ffprobe -v error -show_format -show_streams /work/job/clip77/clip_77.mp4
+$ python3 -I scripts/teardown_media.py /work/job/clip77/clip_77.mp4 --out /work/job/clip77/ref
+$ higgsfield model list
+lumen-v3, cinder-fast.
+
+Observed, file metadata: the only tag is encoder=Lavf60.3.100. That is the FFmpeg muxing library, which names the tool that wrote the file, not the generator. No title, comment, or software tag.
+Observed, technical: H.264, 1280x720, 24 fps, 8.0 s. No watermark visible.
+Observed, visual: a smooth dolly-in on a ceramic mug under soft window light.
+Single-signal, so demoted to unknown: slight warping on the handle, frames 40-48. Not used to infer a model.
+Generator: unknown. Any resemblance to lumen-v3 or cinder-fast is at most inferred, and nothing else in the file supports it, so I am not naming either one.
+
+To the user:
+I can't name the model. Nothing in the file says which generator made it. The only encoder tag is Lavf60.3.100, which is FFmpeg's library and doesn't identify a model.
+
+For the credit line I'd write: "Generator not recoverable from the file; source and creator unknown." If you know the page or creator where the clip came from, check its post or description for the tool.
+
+Do you want me to draft the credit line that way?

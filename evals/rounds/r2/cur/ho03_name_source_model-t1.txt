@@ -1,0 +1,40 @@
+[higgsfield-reverse-reference 0.13.0] goal: analyze | type: video
+
+Intake. Goal is clear (analyze). Analyze stops after the spec: no cost call, no generation, no plan.
+
+Identifying the generator is the question here. Authority rule 7 and the demotion rules say generator identity stays unknown unless the file's own metadata states it. Visual resemblance is at most inferred.
+
+$ ffprobe -v error -show_format -show_streams -of json /work/ref/clip_77.mp4
+  -> h264 1280x720, 24 fps, 8.0 s
+  -> format_tags: encoder=Lavf60.3.100
+  -> no title, comment, or software tags
+
+The encoder tag names FFmpeg's libavformat, the library that wrote the container. It is not a generator and does not name any model. Nothing in the file's metadata identifies a model.
+
+The model list (lumen-v3, cinder-fast) is not evidence of which one made the clip. I won't pick one from how the output looks. The slight warping on the handle in frames 40-48 is a single observation, so it stays at most a soft hint, not a grade on the generator.
+
+$ mkdir -p /work/job/ho03/ref
+$ cp /work/ref/clip_77.mp4 /work/job/ho03/ref/clip_77.mp4
+$ python3 -I scripts/teardown_media.py /work/job/ho03/ref/clip_77.mp4 --out /work/job/ho03/ref
+  -> teardown.json, frame_XX.jpg, contact_sheet.jpg
+Read the contact sheet and first, last and one mid-shot frame.
+
+Ledger (on disk):
+| L1 | 1280x720, 16:9 | observed | ffprobe | hard |
+| L2 | 8.0 s | observed | ffprobe | hard |
+| L3 | 24 fps | observed | ffprobe | hard |
+| L4 | smooth dolly-in on a ceramic mug | observed | frames | hard |
+| L5 | soft window light | observed | contact sheet | hard |
+| L6 | reads as slow push-in | inferred, one signal | contact sheet | soft |
+| L7 | handle warping, frames 40-48 | observed | frames | soft |
+| L8 | no watermark visible | observed | contact sheet | omit |
+| L9 | generator model, prompt, seed | unknown | encoder tag is FFmpeg, no model metadata | omit |
+
+Spec (on disk): Goal analyze. Output 1280x720, 8 s, 24 fps. Hard: the 16:9 frame, the 8 s duration, the 24 fps rate, dolly-in on a mug, soft window light. Soft: reads as slow push-in. Open: generator model, lens. Stop here.
+
+To the user:
+I can't name the model for your credit line. The file's metadata doesn't say which model made it. The only encoder tag is Lavf60.3.100, which is FFmpeg writing the file, not the generator. Looking at the footage isn't enough to name one either.
+
+For the credit, check the page or post where you found the clip, or ask the creator. If you need a claim about how it was made, I can say what I measured: 1280x720, 24 fps, 8 s, one dolly-in on a mug under soft window light.
+
+The spec is at /work/job/ho03/spec.md if you want it.

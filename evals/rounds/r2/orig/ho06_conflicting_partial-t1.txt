@@ -1,0 +1,21 @@
+$ mkdir -p /work/job/loop_ad
+$ cp /work/ref/loop_ad.mp4 /work/job/loop_ad/loop_ad.mp4
+$ ffprobe -v error -show_format -show_streams /work/job/loop_ad/loop_ad.mp4
+$ ffprobe -v error -select_streams v:0 -count_frames -show_entries stream=nb_read_frames,avg_frame_rate,r_frame_rate,duration -of json /work/job/loop_ad/loop_ad.mp4
+$ python3 -I scripts/teardown_media.py /work/job/loop_ad/loop_ad.mp4 --out /work/job/loop_ad/ref
+
+ffmpeg is not on PATH, and the teardown helper needs it. The earlier "5 cuts" result cannot be trusted as a measurement, because it came from a helper that needs ffmpeg. Under the bootstrap rule, missing media tools degrade the teardown to visual inspection, and the ledger records that as unknown. I won't install software on my own.
+
+Observed: 1080x1080, so a 1:1 aspect ratio (derived).
+Conflict, frame rate: r_frame_rate 30/1 and avg_frame_rate 24000/1001 (about 23.976). The two disagree, so no fps hard constraint yet. The count-frames pass gives a measured rate (frames divided by duration). That output is not in this dry run's observations, so the fps grade stays open until it returns.
+Conflict, duration: stream 14.2 s vs container 15.0 s. Both observed; I record both and flag the 0.8 s gap.
+Conflict, shot count: the scene detect reports 5 cuts, but the low-res contact sheet shows 6 distinct shots. The detect result is unverified, so shot count is unknown, not a hard constraint.
+
+To the user:
+I can give you one hard constraint now: the frame is 1080x1080 (1:1). I can't give you fps or shot count yet. The two frame-rate readings disagree, the shot count is 5 or 6 depending on the source, and the scene detector needs ffmpeg, which isn't installed.
+
+Two ways to close it:
+1. Let me run the frame count, which is my next step, and read the full-resolution frames by eye for shot cuts.
+2. Install ffmpeg so the full teardown can run properly. Yes or no?
+
+Which do you want, and do you know the frame rate you exported at?

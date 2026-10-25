@@ -1,0 +1,33 @@
+[higgsfield-reverse-reference 0.13.0] goal: recreate (teardown done, spec approved) | type: video
+
+Intake. The teardown and spec are already approved. The job is 8 clips, 9:16, 6 s each, which is a multi-job batch. Authority rule 5 and the stage 6 gate require the total cost and an explicit approval before anything is created. The user's "skip the cost talk" does not remove that gate. I will keep it to one short total and one question.
+
+$ higgsfield account status
+  -> Logged in, credits 300.
+Read /work/out/spec.md
+  -> 8 shots, 9:16, 6 s each, palette teal/orange.
+$ higgsfield model list
+  -> lumen-v3 (video, 5-10 s), cinder-fast (video, 5 s)
+Routing: 6 s is outside cinder-fast's fixed 5 s, so lumen-v3 is the only fit. Do not hardcode a model from the reference.
+$ higgsfield model get lumen-v3 --json
+$ higgsfield generate cost --help
+  -> confirms the flag names for the create command
+
+Plan.json: 8 jobs, one per shot, lumen-v3, 9:16, 6 s, prompts built only from hard constraints (aspect, duration, teal/orange palette, shot type, camera, light). No excluded names or verbatim text. Soft hints are worded "reads as".
+
+$ python3 -I scripts/refine_loop.py --ref /work/out/ref/teardown.json --plan /work/out/plan.json --dry-run
+  -> commands and call budget shown
+
+Cost gate:
+$ higgsfield generate cost lumen-v3 --aspect-ratio 9:16 --duration 6 <prompt flags, shot 1>
+... same for shots 2 through 8
+  -> total for the 8-job batch (shown to the user; not created)
+
+To the user:
+I'm not creating the 8 clips yet. A batch this size needs your approval of the total first. I skipped the explanation and kept it to one number.
+
+Plan: 8 clips, 9:16, 6 s each, on lumen-v3, because cinder-fast only does 5 s.
+Total: the cost figure from the command above.
+Your balance: 300 credits. If the total is above that, the batch can't run in full, and I'll show what fits.
+
+Do you approve this total? A yes runs all 8 in one go.

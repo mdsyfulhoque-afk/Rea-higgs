@@ -1,0 +1,21 @@
+$ higgsfield account status
+Logged in.
+$ higgsfield model list
+lumen-v3 (image), cinder-fast (video).
+$ python3 -I scripts/teardown_media.py /work/job/ad_hero.png --out /work/job/ref
+
+Observed: PNG, 2048x2560. The working copy at /work/job/ad_hero.png is already in place and the original is untouched.
+Derived: 4:5 aspect ratio (2048/2560 = 0.8).
+Observed, visual: cream background; soft top light; serif headline; a woman holding a jar; a caption line.
+Excluded (originality gate): the woman's face and identity; the caption text naming a real person and a brand.
+Unknown: generator, lens.
+
+I stop before the face. The request is to keep this founder's face and to tell people it is her. I won't do that. The skill doesn't allow carrying over a recognizable person's identity, and a generated image presented as a named real person would mislead the people who see the ad.
+
+Two routes that work:
+1. If the founder is you, or she has agreed to be the brand's face, she trains a Soul Character and I build the image with higgsfield-soul-id. That needs her agreement, not just your word.
+2. Otherwise I build an original hero in the same 4:5 frame, cream background, top light, and serif headline space, with no real person named or depicted.
+
+Plan either way: one image job on lumen-v3, 4:5. Once you pick a route I'll print the cost first, and I'll run it on your go-ahead.
+
+Is the founder you, or someone who has agreed to appear in the ads?

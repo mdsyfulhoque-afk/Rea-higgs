@@ -1,0 +1,30 @@
+Intake: goal = analyze, type = video (h264 1280x720, 8.0 s, 24 fps). Analyze stops after the spec: no cost call, no generation.
+
+Capture: working copy only.
+$ mkdir -p /work/analyze/ref && cp /work/ref/clip_77.mp4 /work/analyze/ref/clip_77.mp4
+
+Metadata check:
+$ ffprobe -v error -show_format -show_streams /work/analyze/ref/clip_77.mp4
+Result: encoder=Lavf60.3.100 (the container muxer, not a generator). No title, comment, or software tag.
+
+Measure:
+$ python3 -I scripts/teardown_media.py /work/analyze/ref/clip_77.mp4 --out /work/analyze/ref
+
+Read (contact sheet): smooth dolly-in on a ceramic mug, soft window light, slight warping on the handle in frames 40-48, no watermark.
+
+Ledger:
+L1 | 1280x720, 16:9 | observed | ffprobe | hard
+L2 | 24 fps | observed | ffprobe | hard
+L3 | 8.0 s | observed | ffprobe | hard
+L4 | smooth dolly-in | observed across frames | contact sheet | hard
+L5 | soft window light | observed | contact sheet | hard
+L6 | warping on the handle, frames 40-48 | observed | contact sheet | omit (single signal, not a usable spec constraint)
+L7 | generator model | unknown | file metadata names no model; the encoder tag is a muxer, not a generator | omit
+
+The catalog lists lumen-v3 and cinder-fast. Neither is tied to this clip by any evidence: the catalog is not evidence, and the warping is not a signature I can check against either model. Any resemblance would be at most inferred, and it has only one signal, so it is demoted to unknown.
+
+Answer to your question: I cannot name the model. Nothing in the file says which model made it, so the credit line should read "generator: unknown (not stated in file metadata)." Do not put either catalog name in the credit.
+
+Writes: /work/analyze/spec.md (goal analyze, the hard and soft lists above, open question: generator identity). Stop here. No cost call and no generation.
+
+To get a real name for the credit, ask whoever posted or made the clip, or check the platform where it was published.

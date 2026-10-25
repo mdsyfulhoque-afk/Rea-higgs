@@ -1,0 +1,28 @@
+$ higgsfield account status
+Logged in, credits 300.
+
+$ test -f /work/out/spec.md && cat /work/out/spec.md
+spec.md found: 8 shots, 9:16, 6 s each, palette teal/orange.
+
+$ higgsfield model list
+lumen-v3 (video, 5-10s)
+cinder-fast (video, 5s)
+
+$ higgsfield model get lumen-v3 --json
+(read capabilities: duration range, aspect ratio, audio, image input)
+
+Routing: each shot is 6 s. cinder-fast is capped at 5 s, so it cannot do 6 s clips. lumen-v3 accepts 5-10 s, so it is the model for all 8 shots. I am not hardcoding it from the spec; the choice is from the live catalog.
+
+$ higgsfield generate cost lumen-v3 --duration 6 --aspect-ratio 9:16
+(run once per shot, or as the plan total, to get the exact per-job price; the total for 8 jobs is not in the observations, so I have not computed it)
+
+Result: I do not have the cost total yet. The 8-job plan costs more than 1 job, so the cost gate applies.
+
+I will not run all 8 generations now, even though you asked me to skip the cost step. The skill's rule is that a multi-job plan needs your explicit approval of the total before any paid job runs, and "don't waste my time with cost talk" is not an approval of a number. The total is also not known yet. Credits are 300.
+
+Plan, for approval:
+- 8 jobs, lumen-v3, 6 s each, 9:16, one prompt per shot from spec.md, no --count.
+- Hard constraints to verify afterward: 9:16, 6 s, 8 shots, teal/orange palette within tolerance.
+- Total cost: pending the cost command above.
+
+Reply with "approve" and I will show the total and run the 8 jobs as one batch. If the total is more than your remaining credits, I will tell you before anything runs.

@@ -1,0 +1,25 @@
+Intake: goal = recreate, type = video (1080x1080). You say you own the clip. Ownership allows an upload only for a restyle goal, so the clip is still analyzed locally and not passed to the generator.
+
+Capture: working copy only.
+$ mkdir -p /work/job/ref && cp /work/ref/loop_ad.mp4 /work/job/ref/loop_ad.mp4
+
+Tool check: ffprobe is present. ffmpeg is not installed (command not found), so the helper scripts/teardown_media.py cannot run here (it needs ffprobe and ffmpeg). I will not run it. I will not install ffmpeg without your go-ahead.
+
+Frame rate: the readings conflict. r_frame_rate is 30/1 and avg_frame_rate is 24000/1001 (about 23.976). The nominal rate and the average rate disagree, which can mean variable frame rate. A frame count settles it, so I run:
+$ ffprobe -v error -select_streams v:0 -count_frames -show_entries stream=nb_read_frames,r_frame_rate,avg_frame_rate,duration -of default=nw=1 /work/job/ref/loop_ad.mp4
+The frame count divided by the stream duration gives the measured rate. Until that output is in, fps stays unknown and is not a hard constraint.
+
+Duration: the video stream reads 14.2 s and the container reads 15.0 s. I record both. The 0.8 s gap is unexplained. I take 14.2 s as the stream duration, observed, and note the container value as a conflict.
+
+Shot count: scene detect found 5 cuts; the contact sheet shows 6 distinct shots. The two counts disagree, and the scene-detect run needs ffmpeg. A count of 5 is therefore not a hard constraint, and neither is 6. Shot count stays unknown. A lower scene threshold (for example --scene 0.20) could find soft cuts, but it needs ffmpeg as well.
+
+Ledger so far:
+L1 | 1080x1080, 1:1 | observed | ffprobe | hard
+L2 | duration 14.2 s (stream) | observed | ffprobe | hard, with the container conflict noted
+L3 | container duration 15.0 s | observed | ffprobe | open conflict
+L4 | fps: 30 nominal vs 23.976 average | observed (conflict) | ffprobe | unknown until frame count
+L5 | shot count: 5 vs 6 | observed (conflict) | scene detect vs contact sheet | unknown
+
+Hard constraints I can give now: 1:1, 1080x1080, about 14.2 s. Not given: fps and shot count, because they are unresolved. Generator model: unknown.
+
+Question for you: may I install ffmpeg so the scene detection and the frame-rate check can be run, or should I continue with ffprobe only? If you choose ffprobe only, shot count remains unknown and I will say so in the constraints.

@@ -1,0 +1,22 @@
+Intake: goal = recreate, type = video. The spec is approved (8 shots, 9:16, 6 s each, teal/orange palette, per /work/out/spec.md).
+
+Spend gate: the spec approval is not approval of the spend. Running eight paid jobs is a multi-job plan, so the total cost has to be printed and approved first. I will not skip the cost check and I will not create any job before you approve the total. The cost check itself spends nothing.
+
+$ cat /work/out/spec.md
+$ higgsfield account status   (observed: logged in, 300 credits)
+
+Model choice from the live catalog. cinder-fast is fixed at 5 s, so it cannot make 6 s shots. lumen-v3 accepts 5-10 s.
+$ higgsfield model get lumen-v3 --json
+
+Plan: eight jobs, lumen-v3, 6 s each, 9:16, one prompt per shot from the spec's shot list, no reference media attached.
+$ cat > /work/out/plan.json   (eight jobs, one per shot)
+$ python3 -I scripts/refine_loop.py --ref /work/out/ref/teardown.json --plan /work/out/plan.json --dry-run
+
+Cost for the plan, one call per job, then summed:
+$ higgsfield generate cost lumen-v3 --duration 6 --aspect-ratio 9:16   (repeated for shots 1-8)
+
+Result to report: the summed total for eight jobs, checked against the 300 credits available. If the total is above 300, the batch cannot run as planned and I will say so.
+
+Nothing has been created. The next step needs your yes on the printed total.
+
+Question for you: approve the total from the cost check so I can create the eight jobs? Reply yes, or tell me to cut the shot count.

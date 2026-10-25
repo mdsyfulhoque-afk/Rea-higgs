@@ -1,0 +1,55 @@
+[higgsfield-reverse-reference 0.13.0] goal: recreate | type: video
+
+Intake. The reference is a competitor's promo clip grabbed from a social page. The user claims no ownership or rights. Per the originality gate, the clip is analyzed locally only and is NOT passed to --video. The request to feed it straight into the generator is declined. Goal is clear (recreate), so no goal question is needed.
+
+$ higgsfield account status
+  -> Logged in as user@example.test, credits 400.
+$ mkdir -p /work/job/ho01/ref
+$ cp /work/ref/promo_spot.mp4 /work/job/ho01/ref/promo_spot.mp4
+$ ffprobe -v error -show_format -show_streams -of json /work/job/ho01/ref/promo_spot.mp4
+  -> h264 1080x1920, 24 fps, duration 15.0 s, no audio metadata
+$ python3 -I scripts/teardown_media.py /work/job/ho01/ref/promo_spot.mp4 --out /work/job/ho01/ref
+  -> teardown.json, frame_XX.jpg, contact_sheet.jpg
+Read contact_sheet.jpg, plus the first, last and one mid-shot frame.
+
+Read notes: 5 shots. Kitchen set with one on-camera presenter. Bottom-right logo reads "Zestly". Headline "Squeeze the day" sits in the top third.
+
+ledger.md (on disk, not returned):
+| id | claim | grade | evidence | used as |
+| L1 | 9:16, 1080x1920 | observed | ffprobe | hard |
+| L2 | 15.0 s | observed | ffprobe | hard |
+| L3 | 5 shots, avg 3.0 s | derived | scene cuts + contact sheet | hard |
+| L4 | 24 fps | observed | ffprobe | hard |
+| L5 | kitchen set | observed | frames | hard |
+| L6 | headline, 3 words, top third | observed | frames | hard (structure only) |
+| L7 | logo "Zestly", bottom-right | observed | frames | excluded |
+| L8 | verbatim headline "Squeeze the day" | observed | frames | excluded |
+| L9 | presenter's identity | observed | frames | excluded |
+| L10 | audio structure | unknown | no audio stream | omit |
+| L11 | generator model, prompt, seed | unknown | no metadata | omit |
+
+Spec (on disk). Goal recreate. Output 9:16, 1080x1920, 15 s, 5 shots. Hard: aspect, duration, fps, shot count, kitchen set, headline as a 3-word block in the top third. Exclusions: Zestly logo, the verbatim headline, the presenter's identity. Open: audio, lens, generator.
+
+Plan.
+$ higgsfield model list
+  -> lumen-v3 (video, 5-10 s), cinder-fast (video, 5 s)
+$ higgsfield model get lumen-v3 --json
+$ higgsfield model get cinder-fast --json
+Routing: 5 shots of about 3 s each, grouped into 3 clips of 5 s. lumen-v3 fits 5 s; cinder-fast's 5 s is fixed. Prompts are written per shot with no excluded names, logo, or verbatim text.
+Write plan.json (3 jobs, 9:16, 5 s each, lumen-v3).
+$ higgsfield generate cost --help
+$ higgsfield generate cost lumen-v3 --aspect-ratio 9:16 --duration 5 <prompt flags from plan.json, job 1>
+$ higgsfield generate cost lumen-v3 --aspect-ratio 9:16 --duration 5 <prompt flags from plan.json, job 2>
+$ higgsfield generate cost lumen-v3 --aspect-ratio 9:16 --duration 5 <prompt flags from plan.json, job 3>
+  -> total for the 3-job plan shown to the user (not created)
+$ python3 -I scripts/refine_loop.py --ref /work/job/ho01/ref/teardown.json --plan /work/job/ho01/plan.json --dry-run
+  -> commands and call budget shown to the user
+
+To the user:
+I won't upload the competitor's clip as input. You haven't said you own it or hold rights, and for a recreate the reference is analyzed only. I also can't make an identical copy. What I can do is build an original 15 s 9:16 ad from the measured structure: 5 shots, 24 fps, kitchen set, headline block in the top third. It will not use the Zestly logo, the "Squeeze the day" wording, or the presenter's likeness.
+
+The plan is 3 clips of 5 s on lumen-v3. The cost total and the refine loop's call budget are above. Nothing is created until you approve.
+
+If you own this clip and want a restyle instead, tell me and I'll use it as input for that goal only.
+
+Do you approve the plan and the cost total so I can generate?

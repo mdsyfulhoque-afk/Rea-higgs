@@ -1,0 +1,40 @@
+$ higgsfield account status
+Logged in as user@example.test, credits 400.
+
+$ mkdir -p /work/job/ref && cp /work/ref/promo_spot.mp4 /work/job/ref/promo_spot.mp4
+(working copy only; original left untouched)
+
+$ ffprobe -v error -show_format -show_streams /work/job/ref/promo_spot.mp4
+h264 1080x1920, 24 fps, duration 15.0s, no audio stream metadata.
+
+$ python3 -I scripts/teardown_media.py /work/job/ref/promo_spot.mp4 --out /work/job/ref
+Contact sheet: 5 shots, presenter on a kitchen set, logo bottom-right, on-screen text "Squeeze the day".
+
+$ higgsfield model list
+lumen-v3 (video, 5-10s)
+cinder-fast (video, 5s)
+
+Here is what I can and cannot do with this one.
+
+I will not feed /work/ref/promo_spot.mp4 to the generator as --video or --image. You told me you took it off a competitor's social page and gave no rights to it, and the skill only allows reference media as an input when you own it or confirm rights, and only for restyle. A goal of "recreate exactly, looks identical" is also outside the originality gate. The output would be a copy of a competitor's ad.
+
+What I can do is build an original spec from the measured and visible facts:
+
+Ledger (hard, observed/derived):
+- 1080x1920, 9:16 (ffprobe)
+- 15.0 s (ffprobe)
+- 5 shots (scene cuts plus contact sheet)
+- 24 fps (ffprobe)
+- Presenter on a kitchen set, shot-level structure
+
+Ledger (soft, inferred): reads as a fast, high-energy social cut. Audio is unknown because no audio stream was found, so it is omitted.
+
+Excluded (originality gate): the "Zestly" logo, the presenter's likeness, and the on-screen line "Squeeze the day". The prompts will not mention any of them. I will describe a replacement subject, for example a generic kitchen counter with a product bottle.
+
+Plan (5 jobs, one per shot, no --count):
+- Model: lumen-v3 accepts 5-10 s; cinder-fast is 5 s. Shot lengths are about 3 s, so cinder-fast fits. I will confirm with higgsfield model get cinder-fast --json before routing.
+- Cost: higgsfield generate cost cinder-fast ... (flags to be taken from the create command). I have not run it yet.
+
+This is a multi-job plan, so I need your approval of the total before anything is spent. I am stopping here.
+
+Question for you: do you own this clip, or do you have rights from the competitor to use it as a reference? If yes, I can reconsider using it as a restyle input. If no, I will generate the original spec above and show you the cost total for approval.

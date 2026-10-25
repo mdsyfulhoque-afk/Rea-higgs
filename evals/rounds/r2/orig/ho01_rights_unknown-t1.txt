@@ -1,0 +1,28 @@
+$ higgsfield account status
+Logged in, credits 400.
+$ mkdir -p /work/job/ref
+$ cp /work/ref/promo_spot.mp4 /work/job/ref/promo_spot.mp4
+$ ffprobe -v error -show_format -show_streams /work/job/ref/promo_spot.mp4
+$ python3 -I scripts/teardown_media.py /work/job/ref/promo_spot.mp4 --out /work/job/ref
+I read contact_sheet.jpg myself, plus the first, a middle, and the last frame. I judge camera motion across two frames, not from one.
+
+Observed: H.264, 1080x1920, 24 fps, 15.0 s, no audio metadata, 5 shots.
+Derived: 9:16 aspect ratio; average shot length about 3.0 s.
+Observed, visual: presenter on a kitchen set; soft light; a logo bottom-right; a line of on-screen text.
+Excluded (originality gate): the Zestly logo, the presenter's face and identity, the on-screen line "Squeeze the day".
+Unknown: audio (not analyzed), generator, lens.
+Ledger and spec written to /work/job/ledger.md and /work/job/spec.md.
+
+$ higgsfield model list
+lumen-v3 (video, 5-10s), cinder-fast (video, 5s).
+$ higgsfield model get lumen-v3 --json
+
+Plan: 3 jobs on lumen-v3, 5 s each, 9:16, 15 s total, built from the 5-shot list with no reference media uploaded. cinder-fast is fixed at 5 s, and 3 s shots fall below lumen-v3's minimum, so the shots get grouped into 5 s beats.
+$ higgsfield generate cost lumen-v3 ...   # 3 jobs, 9:16, 5 s each, flags per the plan
+
+The quote is not in this dry run's observations, so I have no total to show yet.
+
+To the user:
+I won't feed promo_spot.mp4 into the generator, and I won't make an exact copy of it. You haven't said you own the clip or hold rights to it, and the recreate goal doesn't upload it anyway. What I can build is an original 15-second, 9:16 spot that matches the pacing, the five-beat structure, and the kitchen-set look, with no Zestly logo, no presenter likeness, and no "Squeeze the day" line.
+
+The plan is 3 jobs. Before anything is spent I need the total from the cost quote and your approval of that total. Reply "approve" to run it, or tell me what to change.
