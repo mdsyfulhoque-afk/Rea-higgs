@@ -312,6 +312,16 @@ These exist to be run by a human (or by another agent acting as the user) in a f
 - Partial: correct assets but asks a full questionnaire, installs tools without permission, or loses approval state.
 - Fail: uses the Marketing Studio metadata kit, self-approves a mark, produces only raster logos, or skips palette/logo/type selection.
 
+
+## Scenario 15 — Reference teardown before generation
+
+**User:** "Here is a 14 s competitor ad (attached). Make an original version for my skincare brand."
+
+**Expected:** invokes `higgsfield-reverse-reference` first; runs `scripts/teardown_media.py`; looks at the contact sheet; writes a ledger with observed/derived/inferred/unknown grades; spec lists exclusions (logo, face, tagline); prints `higgsfield generate cost` for the plan and asks approval; only then hands off to `higgsfield-generate`; never passes the reference with `--image`/`--video`.
+
+**Pass:** grades are separated, generator identity stays `unknown`, exclusions honored, cost shown before spend, post-generation comparison reported per hard constraint.
+**Fail:** states the source model as fact, copies the logo/face/tagline, uploads the reference without ownership, or generates before approval.
+
 ---
 
 ## Round template (copy when recording results)
@@ -330,6 +340,7 @@ Scenario 11: ...
 Scenario 12: ...
 Scenario 13: ...
 Scenario 14: ...
+Scenario 15: ...
 
 Aggregate: <P pass / Q partial / F fail>
 Time-to-result mean: <Ns>

@@ -2,7 +2,7 @@
 
 ## What this is
 
-Eight skills that drive the [`higgsfield` CLI](https://github.com/higgsfield-ai/cli) — image/video generation, narrated explainers, browser games, Marketing Studio, Virality Predictor scoring, Soul Character training, branded product photography, marketplace cards, and full-stack websites.
+Nine skills that drive the [`higgsfield` CLI](https://github.com/higgsfield-ai/cli) — image/video generation, narrated explainers, browser games, Marketing Studio, Virality Predictor scoring, Soul Character training, branded product photography, marketplace cards, and full-stack websites.
 
 ```
 higgsfield-soul-id     →  trains identity, returns reference_id
@@ -11,6 +11,7 @@ higgsfield-product-photoshoot  →  self-contained, brand visuals via gpt_image_
 higgsfield-marketplace-cards  →  marketplace main, secondary, and A+ style images
 higgsfield-websites  →  build/edit/deploy full-stack sites via `higgsfield website …`
 higgsfield-video-explainer  →  audio + video blocks assembled by `explainer_video`
+higgsfield-reverse-reference  →  evidence-graded teardown of a reference, hands an approved spec to the skills above
 ```
 
 ## Repository structure
@@ -139,12 +140,25 @@ A single repo-wide version must match every skill and plugin manifest:
 - `higgsfield-brandkit/SKILL.md` — `version:` in frontmatter.
 - `higgsfield-websites/SKILL.md` — `version:` in frontmatter.
 - `higgsfield-youtube-thumbnail/SKILL.md` — `version:` in frontmatter.
+- `higgsfield-reverse-reference/SKILL.md` — `version:` in frontmatter.
 - `.claude-plugin/marketplace.json` — `plugins[0].version`.
 - `.claude-plugin/plugin.json` — top-level `version`.
 - `.codex-plugin/plugin.json` — top-level `version`.
 - `.cursor-plugin/plugin.json` — top-level `version`.
 
-CI fails if any drift. Don't bump versions by hand on feature branches — let release automation handle it on merge to `main` (when wired up).
+Run `python3 scripts/validate-skills.py` locally before every push; CI runs the same script. CI fails if any drift. Don't bump versions by hand on feature branches — let release automation handle it on merge to `main` (when wired up).
+
+## Evidence discipline
+
+Adopted from the REA reverse-engineering project's engineering rules. Applies to skill content, evals, and PR descriptions.
+
+- Separate **observed**, **derived**, **inferred**, and **unknown**. Do not state an inference as a fact in a skill, a reference doc, or a prompt.
+- Any model, flag, preset, or workflow claim must be verifiable with `higgsfield model get`, `higgsfield workflow get`, or `--help`. Unverified entries are marked as such or removed.
+- Fix the owning source. If a fact lives in `model-catalog.md`, correct it there rather than patching it in a second file. No duplicated interpretation across skills beyond the allowed per-skill copies.
+- Smallest sufficient context: new content goes to `references/` first; `SKILL.md` keeps only decision-making content (see the 300-line rule).
+- Performance claims (token cost, latency, credit cost) in a PR must state what was measured, cold vs warm, and what was not measured.
+- No speculative complexity: explain the concrete failure mode and cost before adding a guard for an unlikely edge case.
+- PR titles and commits use Conventional Commit subjects; breaking changes carry `!` or a `BREAKING CHANGE:` footer.
 
 ## Skill chaining
 
@@ -155,6 +169,7 @@ Skills communicate through return values, not implicit state.
 - `higgsfield-product-photoshoot` does not chain — it owns its own pipeline.
 - `higgsfield-marketplace-cards` does not chain by default; it can reuse an existing main image job through `--main-job`.
 - `higgsfield-video-explainer` owns complete narrated explainers: live style resolve, Seed Audio blocks, Gemini Omni clips, then `explainer_video` assembly. Generic short video generation stays in `higgsfield-generate`.
+- `higgsfield-reverse-reference` runs before generation when the user supplies a reference. It returns an approved spec (hard constraints, soft hints, exclusions, plan); the owning skill generates. It never passes third-party reference media to generation unless the user owns it.
 - `higgsfield-websites` owns browser games (`--type game`): game-wide design, assets, build, verification, and deployment through `higgsfield website deploy`.
 
 When the user asks for both identity AND output in one request ("train Soul on these photos AND make a video of me"), run `higgsfield-soul-id` first, then `higgsfield-generate`. Don't batch-ask questions across skills — finish Soul, then start the video conversation.

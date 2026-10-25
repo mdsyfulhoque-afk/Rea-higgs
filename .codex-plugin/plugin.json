@@ -21,7 +21,8 @@
     "brandkit",
     "brand-identity",
     "video-explainer",
-    "youtube-thumbnail"
+    "youtube-thumbnail",
+    "reference-teardown"
   ],
   "skills": "./",
   "interface": {
@@ -43,6 +44,7 @@
       "Create a complete visual identity and brandbook for this business",
       "Turn this document into a narrated explainer",
       "Create a YouTube thumbnail for this video",
+      "Break down this reference ad and recreate an original version",
       "Build and deploy a small browser game"
     ],
     "brandColor": "#D1FE17",

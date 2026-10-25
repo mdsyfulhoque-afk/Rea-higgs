@@ -1,0 +1,4 @@
+interface:
+  display_name: "Higgsfield Reverse Reference"
+  short_description: "Teardown a reference into an evidence-graded spec, then recreate it originally"
+  default_prompt: "Use $higgsfield-reverse-reference to break down this reference and recreate an original version."

@@ -8,6 +8,8 @@ on:
       - ".codex-plugin/**"
       - ".cursor-plugin/**"
       - "VERSION"
+      - "scripts/**"
+      - "setup"
       - ".github/workflows/validate-skills.yml"
   push:
     branches: [main]
@@ -17,6 +19,8 @@ on:
       - ".codex-plugin/**"
       - ".cursor-plugin/**"
       - "VERSION"
+      - "scripts/**"
+      - "setup"
       - ".github/workflows/validate-skills.yml"
 
 jobs:
@@ -33,6 +37,19 @@ jobs:
 
       - name: Install PyYAML
         run: pip install pyyaml --quiet
+
+      - name: Run consolidated validator
+        run: python3 scripts/validate-skills.py
+
+      - name: Smoke-test media teardown helper
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
+          ffmpeg -v error -y -f lavfi -i "color=c=red:s=320x180:d=1" -f lavfi -i "color=c=blue:s=320x180:d=1" \
+            -filter_complex "[0][1]concat=n=2:v=1:a=0" -r 24 /tmp/ref.mp4
+          python3 higgsfield-reverse-reference/scripts/teardown_media.py /tmp/ref.mp4 --out /tmp/td >/dev/null
+          python3 higgsfield-reverse-reference/scripts/teardown_media.py /tmp/ref.mp4 --out /tmp/td2 >/dev/null
+          python3 higgsfield-reverse-reference/scripts/teardown_media.py --compare /tmp/td/teardown.json /tmp/td2/teardown.json | grep -q '"all_pass": true'
 
       - name: Validate frontmatter and name
         run: |
